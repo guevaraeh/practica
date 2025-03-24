@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('assistance_teachers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('teacher_id');
+            //$table->foreignIdFor(Teacher::class);
+            $table->string('training_module', length: 100);
+            $table->string('period', length: 100);
+            $table->string('turn', length: 50);
+            $table->text('didactic_unit');
+            $table->dateTime('checkin_time', precision: 0)->nullable()->useCurrent();
+            $table->dateTime('departure_time', precision: 0)->nullable()->useCurrent();
+            $table->string('theme', length: 200);
+            $table->string('place', length: 100);
+            $table->string('educational_platforms', length: 200);
+            $table->text('remarks')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('assistance_teachers');
+    }
+};

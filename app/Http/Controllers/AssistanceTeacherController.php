@@ -98,7 +98,7 @@ class AssistanceTeacherController extends Controller
             'place' => $request->input('place'),
             'educational_platforms' => implode(', ', $request->input('educational-platforms')),
             'remarks' => $request->input('remarks'),
-            'token' => $request->input('_token'),
+            'remember_token' => $request->input('_token'),
         ]);
 
         return redirect(route('assistance_teacher'));
