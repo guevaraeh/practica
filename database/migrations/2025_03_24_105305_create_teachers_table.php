@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

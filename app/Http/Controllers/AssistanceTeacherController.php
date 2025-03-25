@@ -21,13 +21,20 @@ class AssistanceTeacherController extends Controller
         /*return view('assistance_teacher.index', [
             'assistance_teachers' => AssistanceTeacher::orderBy('id', 'desc')->paginate(10)
         ]);*/
+        //SELECT DATE_FORMAT(checkin_time, "%Y/%m/%d %h:%i %r") FROM assistance_teachers WHERE 1
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
+                ->select([DB::raw("CONCAT(teachers.name,' ',teachers.lastname) as teacher_name"),'assistance_teachers.*'])
+                ->join('teachers', 'assistance_teachers.teacher_id', '=', 'teachers.id')
                 ->orderBy('assistance_teachers.id', 'desc');
             return DataTables::eloquent($assistance_teachers)
-                                ->addColumn('teacher_name',function (AssistanceTeacher $data){
+                                /*->addColumn('teacher_name',function (AssistanceTeacher $data){
                                     return $data->teacher->lastname .' '. $data->teacher->name;
+                                })*/
+                                ->filterColumn('teacher_name', function($query, $keyword) {
+                                    $sql = "CONCAT(teachers.name,' ',teachers.lastname) like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->editColumn('created_at', function(AssistanceTeacher $data) {
                                     return date('Y/m/d h:i A', strtotime($data->created_at));
@@ -38,6 +45,25 @@ class AssistanceTeacherController extends Controller
                                 ->editColumn('departure_time', function(AssistanceTeacher $data) {
                                     return date('Y-m-d h:i A', strtotime($data->departure_time));
                                 })
+                                ->filterColumn('checkin_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })
+                                ->filterColumn('checkin_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })
+                                ->filterColumn('departure_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })
+                                ->addColumn('action',function (AssistanceTeacher $data){
+                                    $links = '
+                                      <a href="'.route('assistance_teacher.edit',$data->id).'">Editar</a>
+                                    ';
+                                    return $links;
+                                })
+                                ->rawColumns(['action'])
                                 ->make(true);
         }
         return view('assistance_teacher.index');

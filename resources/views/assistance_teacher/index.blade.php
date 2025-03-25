@@ -45,6 +45,7 @@
                                             <th>Lugar de realización de actividad</th>
                                             <th>Plataformas educativas de apoyo</th>
                                             <th>Observaciones</th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -106,6 +107,7 @@ $( document ).ready(function() {
             {data:'place', name:'place'},
             {data:'educational_platforms', name:'educational_platforms'},
             {data:'remarks', name:'remarks'},
+            {data:'action', name:'action'},
         ]
     });
 

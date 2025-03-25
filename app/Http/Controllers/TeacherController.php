@@ -67,10 +67,22 @@ class TeacherController extends Controller
                                     return date('Y/m/d h:i A', strtotime($data->created_at));
                                 })
                                 ->editColumn('checkin_time', function(AssistanceTeacher $data) {
-                                    return date('h:i A', strtotime($data->checkin_time));
+                                    return date('Y/m/d h:i A', strtotime($data->checkin_time));
                                 })
                                 ->editColumn('departure_time', function(AssistanceTeacher $data) {
-                                    return date('h:i A', strtotime($data->departure_time));
+                                    return date('Y/m/d h:i A', strtotime($data->departure_time));
+                                })
+                                ->filterColumn('checkin_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })
+                                ->filterColumn('checkin_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })
+                                ->filterColumn('departure_time', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->make(true);
         }
