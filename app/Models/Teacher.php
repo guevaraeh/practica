@@ -17,4 +17,5 @@ class Teacher extends Model
         //return $this->hasMany(AssistanceTeacher::class)->orderBy('id', 'desc');
         return $this->hasMany(AssistanceTeacher::class);
     }
+
 }

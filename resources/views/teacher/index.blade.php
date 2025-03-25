@@ -20,7 +20,7 @@
                                             <th>Apellidos</th>
                                             <th>Nombres</th>
                                             <th>Nro. de registros de asistencia</th>
-                                            <th></th>
+                                            <th>Asistencias</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -30,7 +30,7 @@
                                             <td>{{ $teacher->lastname }}</td>
                                             <td>{{ $teacher->name }}</td>
                                             <td>{{ $teacher->assistances->count() }}</td>
-                                            <td><a href="{{ route('teacher.show', $teacher->id) }}">Asistencias</a></td>
+                                            <td><a href="{{ route('teacher.show', $teacher->id) }}" class="btn btn-primary">Ver</a></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

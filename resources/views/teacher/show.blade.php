@@ -21,13 +21,14 @@
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
                                             <th>Turno/Sección</th>
-                                            <th>Unidad Didáctica</th>
+                                            {{--<th>Unidad Didáctica</th>--}}
                                             <th>Hora de ingreso</th>
                                             <th>Hora de salida</th>
-                                            <th>Tema de actividad de aprendizaje</th>
-                                            <th>Lugar de realización de actividad</th>
-                                            <th>Plataformas educativas de apoyo</th>
-                                            <th>Observaciones</th>
+                                            {{--<th>Tema de actividad de aprendizaje</th>--}}
+                                            <th>Lugar</th>
+                                            <th>Plataformas de apoyo</th>
+                                            {{--<th>Observaciones</th>--}}
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -36,13 +37,14 @@
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
                                             <th>Turno/Sección</th>
-                                            <th>Unidad Didáctica</th>
+                                            {{--<th>Unidad Didáctica</th>--}}
                                             <th>Hora de ingreso</th>
                                             <th>Hora de salida</th>
-                                            <th>Tema de actividad de aprendizaje</th>
-                                            <th>Lugar de realización de actividad</th>
-                                            <th>Plataformas educativas de apoyo</th>
-                                            <th>Observaciones</th>
+                                            {{--<th>Tema de actividad de aprendizaje</th>--}}
+                                            <th>Lugar</th>
+                                            <th>Plataformas de apoyo</th>
+                                            {{--<th>Observaciones</t>--}}
+                                            <th>Acción</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -95,13 +97,14 @@ $( document ).ready(function() {
             {data:'training_module', name:'training_module'},
             {data:'period', name:'period'},
             {data:'turn', name:'turn'},
-            {data:'didactic_unit', name:'didactic_unit'},
+            //{data:'didactic_unit', name:'didactic_unit'},
             {data:'checkin_time', name:'checkin_time'},
             {data:'departure_time', name:'departure_time'},
-            {data:'theme', name:'theme'},
+            //{data:'theme', name:'theme'},
             {data:'place', name:'place'},
             {data:'educational_platforms', name:'educational_platforms'},
-            {data:'remarks', name:'remarks'},
+            //{data:'remarks', name:'remarks'},
+            {data:'action', name:'action'},
         ]
     });
 

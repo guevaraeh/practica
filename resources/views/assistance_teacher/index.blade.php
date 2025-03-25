@@ -22,13 +22,14 @@
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
                                             <th>Turno/Sección</th>
-                                            <th>Unidad Didáctica</th>
+                                            {{--<th>Unidad Didáctica</th>--}}
                                             <th>Hora de ingreso</th>
                                             <th>Hora de salida</th>
-                                            <th>Tema de actividad de aprendizaje</th>
-                                            <th>Lugar de realización de actividad</th>
-                                            <th>Plataformas educativas de apoyo</th>
-                                            <th>Observaciones</th>
+                                            {{--<th>Tema de actividad de aprendizaje</th>--}}
+                                            <th>Lugar</th>
+                                            <th>Plataformas de apoyo</th>
+                                            {{--<th>Observaciones</th>--}}
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -38,39 +39,46 @@
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
                                             <th>Turno/Sección</th>
-                                            <th>Unidad Didáctica</th>
+                                            {{--<th>Unidad Didáctica</th>--}}
                                             <th>Hora de ingreso</th>
                                             <th>Hora de salida</th>
-                                            <th>Tema de actividad de aprendizaje</th>
-                                            <th>Lugar de realización de actividad</th>
-                                            <th>Plataformas educativas de apoyo</th>
-                                            <th>Observaciones</th>
-                                            <th></th>
+                                            {{--<th>Tema de actividad de aprendizaje</th>--}}
+                                            <th>Lugar</th>
+                                            <th>Plataformas de apoyo</th>
+                                            {{--<th>Observaciones</th>--}}
+                                            <th>Acción</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        {{--
-                                    	@foreach($assistance_teachers as $assistance_teacher)
-                                        <tr>
-                                            <td><small>{{ $assistance_teacher->created_at }}</small></td>
-                                            <td><small>{{ $assistance_teacher->teacher->lastname . ' ' . $assistance_teacher->teacher->name }}</small></td>
-                                            <td><small>{{ $assistance_teacher->training_module }}</small></td>
-                                            <td><small>{{ $assistance_teacher->period }}</small></td>
-                                            <td><small>{{ $assistance_teacher->turn }}</small></td>
-                                            <td><small>{{ $assistance_teacher->didactic_unit }}</small></td>
-                                            <td><small>{{ $assistance_teacher->checkin_time }}</small></td>
-                                            <td><small>{{ $assistance_teacher->departure_time }}</small></td>
-                                            <td><small>{{ $assistance_teacher->theme }}</small></td>
-                                            <td><small>{{ $assistance_teacher->place }}</small></td>
-                                            <td><small>{{ $assistance_teacher->educational_platforms }}</small></td>
-                                            <td><small>{{ $assistance_teacher->remarks }}</small></td>
-                                        </tr>
-                                        @endforeach
-                                        --}}
+
                                     </tbody>
                                 </table>
                             </div>
-                            {{-- $assistance_teachers->links() --}}
+
+                            {{--
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              Launch demo modal
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    ...
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            --}}
                 </div>
               </div>
             </div>
@@ -100,13 +108,13 @@ $( document ).ready(function() {
             {data:'training_module', name:'training_module'},
             {data:'period', name:'period'},
             {data:'turn', name:'turn'},
-            {data:'didactic_unit', name:'didactic_unit'},
+            //{data:'didactic_unit', name:'didactic_unit'},
             {data:'checkin_time', name:'checkin_time'},
             {data:'departure_time', name:'departure_time'},
-            {data:'theme', name:'theme'},
+            //{data:'theme', name:'theme'},
             {data:'place', name:'place'},
             {data:'educational_platforms', name:'educational_platforms'},
-            {data:'remarks', name:'remarks'},
+            //{data:'remarks', name:'remarks'},
             {data:'action', name:'action'},
         ]
     });

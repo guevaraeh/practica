@@ -23,7 +23,7 @@ return new class extends Migration
             $table->dateTime('departure_time', precision: 0)->nullable()->useCurrent();
             $table->string('theme', length: 200);
             $table->string('place', length: 100);
-            $table->string('educational_platforms', length: 200);
+            $table->string('educational_platforms', length: 200)->nullable();
             $table->text('remarks')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -25,7 +25,7 @@ class AssistanceTeacherController extends Controller
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
-                ->select([DB::raw("CONCAT(teachers.name,' ',teachers.lastname) as teacher_name"),'assistance_teachers.*'])
+                ->select([DB::raw("CONCAT(teachers.lastname,' ',teachers.name) as teacher_name"),'assistance_teachers.*'])
                 ->join('teachers', 'assistance_teachers.teacher_id', '=', 'teachers.id')
                 ->orderBy('assistance_teachers.id', 'desc');
             return DataTables::eloquent($assistance_teachers)
@@ -33,7 +33,7 @@ class AssistanceTeacherController extends Controller
                                     return $data->teacher->lastname .' '. $data->teacher->name;
                                 })*/
                                 ->filterColumn('teacher_name', function($query, $keyword) {
-                                    $sql = "CONCAT(teachers.name,' ',teachers.lastname) like ?";
+                                    $sql = "CONCAT(teachers.lastname,' ',teachers.name) like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->editColumn('created_at', function(AssistanceTeacher $data) {
@@ -58,9 +58,79 @@ class AssistanceTeacherController extends Controller
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
-                                    $links = '
-                                      <a href="'.route('assistance_teacher.edit',$data->id).'">Editar</a>
-                                    ';
+                                    $links = 
+                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'">
+                                          Ver
+                                        </button>
+
+                                        <div class="modal fade" id="modal'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-bordered">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><b><small>Apellidos y Nombres</small></b></td>
+                                                                <td><small>'.$data->teacher->lastname.' '.$data->teacher->name.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Módulo Formativo</small></b></td>
+                                                                <td><small>'.$data->training_module.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Período Académico</small></b></td>
+                                                                <td><small>'.$data->period.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Turno/Sección</small></b></td>
+                                                                <td><small>'.$data->turn.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Unidad Didáctica</small></b></td>
+                                                                <td><small>'.$data->didactic_unit.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Hora de ingreso</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->checkin_time)).'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Hora de salida</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Tema de actividad de aprensizaje</small></b></td>
+                                                                <td><small>'.$data->theme.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Lugar de realización de actividad</small></b></td>
+                                                                <td><small>'.$data->place.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Plataformas educativas de apoyo</small></b></td>
+                                                                <td><small>'.$data->educational_platforms.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Observaciones</small></b></td>
+                                                                <td><small>'.$data->remarks.'</small></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    '.
+                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-secondary">Editar</a>';
                                     return $links;
                                 })
                                 ->rawColumns(['action'])
@@ -143,7 +213,11 @@ class AssistanceTeacherController extends Controller
      */
     public function edit(AssistanceTeacher $assistanceTeacher)
     {
-        //
+        $edplat= explode(', ',$assistanceTeacher->educational_platforms);
+        //dd($edplat);
+        //dd(array_search('Aula', $edplat));
+
+        return view('assistance_teacher.edit',['assistance_teacher' => $assistanceTeacher, 'edplat' => $edplat]);
     }
 
     /**
@@ -151,7 +225,59 @@ class AssistanceTeacherController extends Controller
      */
     public function update(UpdateAssistanceTeacherRequest $request, AssistanceTeacher $assistanceTeacher)
     {
-        //
+        //dd($request->collect());
+
+        /*$validated = $request->validate([
+            'teacher-id' => 'required',
+            'training-module' => 'required',
+            'period' => 'required',
+            'turn' => 'required',
+            'didactic-unit' => 'required',
+            //'checkin-time' => 'required',
+            //'departure-time' => 'required',
+            'theme' => 'required',
+            'place' => 'required',
+        ]);*/
+
+        //dd($request->collect());
+
+        /*$data = $validated;
+        $data['checkin_time'] = date('Y-m-d H:i:s', strtotime($data['checkin_time']));
+        $data['departure_time'] = date('Y-m-d H:i:s', strtotime($data['departure_time']));
+        $data['educational_platforms'] = implode(', ', $data['educational_platforms']);
+
+        $assistanceTeacher->update($data);*/
+
+        /*$data = AssistanceTeacher::find($assistanceTeacher->id);
+        $data->update([
+            'training_module' => $request->input('training-module'),
+            'period' => $request->input('period'),
+            'turn' => $request->input('turn'),
+            'didactic_unit' => $request->input('didactic-unit'),
+            'checkin_time' => date('Y-m-d H:i:s', strtotime($request->input('checkin-time'))),
+            'departure_time' => date('Y-m-d H:i:s', strtotime($request->input('departure-time'))),
+            'theme' => $request->input('theme'),
+            'place' => $request->input('place'),
+            'educational_platforms' => implode(', ', $request->input('educational-platforms')),
+            'remarks' => $request->input('remarks'),
+        ]);
+        dd($data);*/
+
+        $assistanceTeacher->training_module = $request->input('training-module');
+        $assistanceTeacher->period = $request->input('period');
+        $assistanceTeacher->turn = $request->input('period');
+        $assistanceTeacher->didactic_unit = $request->input('didactic-unit');
+        $assistanceTeacher->checkin_time = date('Y-m-d H:i:s', strtotime($request->input('checkin-time')));
+        $assistanceTeacher->departure_time = date('Y-m-d H:i:s', strtotime($request->input('departure-time')));
+        $assistanceTeacher->theme = $request->input('theme');
+        $assistanceTeacher->place = $request->input('place');
+        $assistanceTeacher->educational_platforms = implode(', ', $request->input('educational-platforms'));
+        $assistanceTeacher->remarks = $request->input('remarks');
+
+        $assistanceTeacher->save();
+
+        return redirect(route('assistance_teacher'));
+        //->with('success','Product updated successfully')
     }
 
     /**
@@ -159,6 +285,7 @@ class AssistanceTeacherController extends Controller
      */
     public function destroy(AssistanceTeacher $assistanceTeacher)
     {
-        //
+        $assistanceTeacher->delete();
+        return redirect(route('assistance_teacher'));
     }
 }

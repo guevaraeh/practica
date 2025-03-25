@@ -16,4 +16,7 @@ class AssistanceTeacher extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+
+    //protected $fillable = ['training_module','period','turn','didactic_unit','checkin_time','departure_time','theme','place','educational_platforms','remarks'];
+    protected $guarded = ['id'];
 }

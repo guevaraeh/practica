@@ -84,6 +84,78 @@ class TeacherController extends Controller
                                     $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %h:%i %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
+                                ->addColumn('action',function (AssistanceTeacher $data){
+                                    $links = 
+                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'">
+                                          Ver
+                                        </button>
+
+                                        <div class="modal fade" id="modal'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg modal-dialog-centered">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover table-bordered">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><b><small>Módulo Formativo</small></b></td>
+                                                                <td><small>'.$data->training_module.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Período Académico</small></b></td>
+                                                                <td><small>'.$data->period.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Turno/Sección</small></b></td>
+                                                                <td><small>'.$data->turn.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Unidad Didáctica</small></b></td>
+                                                                <td><small>'.$data->didactic_unit.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Hora de ingreso</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->checkin_time)).'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Hora de salida</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Tema de actividad de aprensizaje</small></b></td>
+                                                                <td><small>'.$data->theme.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Lugar de realización de actividad</small></b></td>
+                                                                <td><small>'.$data->place.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Plataformas educativas de apoyo</small></b></td>
+                                                                <td><small>'.$data->educational_platforms.'</small></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b><small>Observaciones</small></b></td>
+                                                                <td><small>'.$data->remarks.'</small></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    ';
+                                    return $links;
+                                })
+                                ->rawColumns(['action'])
                                 ->make(true);
         }
 
