@@ -24,6 +24,16 @@ class AssistanceTeacherFactory extends Factory
 
         $place = ["Aula","Laboratorio","Taller"];
 
+        $educational_platforms = [
+            "Moodle Institucional", 
+            "Google Meet", 
+            "Otro", 
+            "Moodle Institucional, Google Meet", 
+            "Google Meet, Otro", 
+            "Moodle Institucional, Otro", 
+            "Moodle Institucional, Google Meet, Otro"
+        ];
+
         return [
             'teacher_id' => rand(1, $counter),
             'training_module' => $training_module[rand(0,1)],
@@ -33,7 +43,7 @@ class AssistanceTeacherFactory extends Factory
 
             'theme' => "Tema de hoy",
             'place' => $place[rand(0,2)],
-            'educational_platforms' => "Moodle Institucional, Google Meet, Otro",
+            'educational_platforms' => $educational_platforms[rand(0,6)],
             'remarks' => fake()->paragraph(),
         ];
     }
