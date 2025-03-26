@@ -7,6 +7,7 @@
 @section('content')
 <div class="container-fluid">
             <div class="col-lg-12">
+                @include('includes.alert')
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold">Asistencias</h6>
@@ -17,7 +18,7 @@
                                 <table class="table table-hover" id="datat">
                                     <thead>
                                         <tr class="table-secondary">
-                                        	<th>Fecha de subida</th>
+                                            <th>Fecha de subida</th>
                                             <th>Apellidos y Nombres</th>
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
@@ -29,7 +30,7 @@
                                             <th>Lugar</th>
                                             <th>Plataformas de apoyo</th>
                                             {{--<th>Observaciones</th>--}}
-                                            <th>Acción</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -46,7 +47,7 @@
                                             <th>Lugar</th>
                                             <th>Plataformas de apoyo</th>
                                             {{--<th>Observaciones</th>--}}
-                                            <th>Acción</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -116,7 +117,59 @@ $( document ).ready(function() {
             {data:'educational_platforms', name:'educational_platforms'},
             //{data:'remarks', name:'remarks'},
             {data:'action', name:'action'},
-        ]
+        ],
+        initComplete: function () {
+            //$("#dt-length-0").attr("class","form-select");
+            //$("#dt-search-0").attr("class","form-control");
+            this.api()
+                .columns([0,1,5,6,7,8])
+                .every(function () {
+                    let column = this;
+                    let title = column.footer().textContent;
+     
+                    // Create input element
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    input.setAttribute('class', 'form-control');
+                    column.footer().replaceChildren(input);
+     
+                    // Event listener for user input
+                    input.addEventListener('keyup', () => {
+                        if (column.search() !== this.value) {
+                            column.search(input.value).draw();
+                        }
+                    });
+                });
+
+            this.api()
+                .columns([2,3,4])
+                .every(function () {
+                    let column = this;
+     
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.setAttribute('class', 'form-select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+                    
+                    // Add list of options
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.add(new Option(d));
+                        });
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, {exact: true})
+                            .draw();
+                    });
+                });
+        }
+
     });
 
 });

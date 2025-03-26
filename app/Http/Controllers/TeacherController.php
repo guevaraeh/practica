@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use App\Models\AssistanceTeacher;
+use App\Models\Period;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
@@ -91,16 +93,24 @@ class TeacherController extends Controller
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
+                                    $updated = '';
+                                    if(strtotime($data->created_at) < strtotime($data->updated_at))
+                                    {
+                                        $updated = '<tr>
+                                                                <td><b><small>Editado</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
+                                                            </tr>';
+                                    }
                                     $links = 
-                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'">
-                                          Ver
+                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'" title="Ver">
+                                          <i class="bi-eye"></i>
                                         </button>
 
                                         <div class="modal fade" id="modal'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog modal-lg modal-dialog-centered">
                                             <div class="modal-content">
-                                              <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
+                                              <div class="modal-header bg-primary">
+                                                <h5 class="modal-title text-light" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                               </div>
                                               <div class="modal-body">
@@ -148,17 +158,40 @@ class TeacherController extends Controller
                                                                 <td><b><small>Observaciones</small></b></td>
                                                                 <td><small>'.$data->remarks.'</small></td>
                                                             </tr>
+                                                            '.$updated.'
                                                         </tbody>
                                                     </table>
                                                 </div>
                                               </div>
-                                              <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                              </div>
                                             </div>
                                           </div>
                                         </div>
-                                    ';
+                                        '.
+                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
+                                    .
+                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
+                                      <i class="bi-trash"></i>
+                                    </button>
+
+                                    <div class="modal fade" id="modaldelete'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header bg-danger">
+                                            <h5 class="modal-title text-light" id="exampleModalLabel">¿Seguro que quieres eliminar el registro de asistencia de '.$data->teacher->lastname.' '.$data->teacher->name.' del '.date('Y-m-d h:i A', strtotime($data->created_at)).'?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <form method="POST" action="'.route('assistance_teacher.destroy',$data->id).'"> 
+                                                <input type="hidden" name="_token" value="'.csrf_token().'" autocomplete="off">                    
+                                                <input type="hidden" name="_method" value="DELETE">
+                                              <button type="submit" class="btn btn-danger">Si</button>
+                                            </form>
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>'
+                                    ;
                                     return $links;
                                 })
                                 ->rawColumns(['action'])

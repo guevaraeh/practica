@@ -5,7 +5,8 @@ use App\Http\Controllers\AssistanceTeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('dashboard');
+    //return view('dashboard');
+    return redirect(route('assistance_teacher.create'));
 });
 
 Route::get('/teacher', [TeacherController::class, 'index'])->name('teacher');

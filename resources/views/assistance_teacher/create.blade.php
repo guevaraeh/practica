@@ -17,7 +17,7 @@
                     <div class="mb-3">
                     <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Apellidos y Nombres</label>
+                          <label for="exampleFormControlInput1" class="form-label">Apellidos y Nombres<font color="red">*</font></label>
                           <select class="form-select selectto" aria-label="Default select example" name="teacher-id" id="teacher-id" required>
                             <option>--Seleccione profesor--</option>
                             @foreach($teachers as $teacher)
@@ -26,7 +26,7 @@
                           </select>
                       </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo</label>
+                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
                             <option value="Profesional/Especialidad">Profesional/Especialidad</option>
                             <option value="Transversal/Empleabilidad">Transversal/Empleabilidad</option>
@@ -38,15 +38,20 @@
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Período Académico</label>
+                          <label for="exampleFormControlInput1" class="form-label">Período Académico<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="period" id="period" required>
+                            {{--
                             <option value="Segundo">Segundo</option>
                             <option value="Cuarto">Cuarto</option>
                             <option value="Sexto">Sexto</option>
+                            --}}
+                            @foreach($periods as $period)
+                            <option value="{{ $period->name }}">{{ $period->name }}</option>
+                            @endforeach
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección</label>
+                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="turn" id="turn" required>
                             <option value="Diurno">Diurno</option>
                             <option value="Nocturno">Nocturno</option>
@@ -56,21 +61,21 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica</label>
+                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica<font color="red">*</font></label>
                       <textarea class="form-control" id="validationCustom01" name="didactic-unit" id="didactic-unit" required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase</label>
+                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase<font color="red">*</font></label>
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
                             value="{{ date('Y-m-d H:i', time()) }}"
                             {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
                           required>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase</label>
+                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase<font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
                             value="{{ date('Y-m-d H:i', strtotime('+3 hour')) }}" 
                             {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
@@ -80,14 +85,14 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje</label>
+                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje<font color="red">*</font></label>
                       <input type="text" class="form-control" name="theme" id="theme" required>
                     </div>
 
                     <div class="mb-3">
                     <div class="form-group row">
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad</label>
+                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad<font color="red">*</font></label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="place" value="Aula" checked>
                         <label class="form-check-label" for="flexRadioDefault1">Aula</label>
@@ -136,7 +141,8 @@
                     </div>
 
                     <div class="mb-3">
-                      <button type="submit" class="btn btn-primary">Enviar</button>
+                      <button type="submit" class="btn btn-primary">Guardar</button>
+                      <a href="{{ route('assistance_teacher') }}" class="btn btn-danger">Cancelar</a>
                     </div>
 
                   </form>

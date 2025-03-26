@@ -46,6 +46,7 @@ class AssistanceTeacherFactory extends Factory
             'place' => $place[rand(0,2)],
             'educational_platforms' => $educational_platforms[rand(0,6)],
             'remarks' => fake()->paragraph(),
+            //'remember_token' => Str::random(10)
         ];
     }
 }

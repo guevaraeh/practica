@@ -7,6 +7,7 @@
 @section('content')
 <div class="container">
             <div class="col-lg-12">
+                @include('includes.alert')
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold">Lista de profesores</h6>
@@ -30,7 +31,7 @@
                                             <td>{{ $teacher->lastname }}</td>
                                             <td>{{ $teacher->name }}</td>
                                             <td>{{ $teacher->assistances->count() }}</td>
-                                            <td><a href="{{ route('teacher.show', $teacher->id) }}" class="btn btn-primary">Ver</a></td>
+                                            <td><a href="{{ route('teacher.show', $teacher->id) }}" class="btn btn-primary" title="Ver registros de asistencia"><i class="bi-eye"></i></a></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

@@ -19,7 +19,7 @@
                     <div class="mb-3">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo</label>
+                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
                             <option value="Profesional/Especialidad" {{ $assistance_teacher->training_module == 'Profesional/Especialidad' ? 'selected' : '' }}>Profesional/Especialidad</option>
                             <option value="Transversal/Empleabilidad"{{ $assistance_teacher->training_module == 'Transversal/Empleabilidad' ? 'selected' : '' }}>Transversal/Empleabilidad</option>
@@ -31,15 +31,20 @@
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Período Académico</label>
+                          <label for="exampleFormControlInput1" class="form-label">Período Académico<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="period" id="period" required>
+                            {{--
                             <option value="Segundo" {{ $assistance_teacher->period == 'Segundo' ? 'selected' : '' }}>Segundo</option>
                             <option value="Cuarto" {{ $assistance_teacher->period == 'Cuarto' ? 'selected' : '' }}>Cuarto</option>
                             <option value="Sexto" {{ $assistance_teacher->period == 'Sexto' ? 'selected' : '' }}>Sexto</option>
+                            --}}
+                            @foreach($periods as $period)
+                            <option value="{{ $period->name }}" {{ $assistance_teacher->period == $period->name ? 'selected' : '' }}>{{ $period->name }}</option>
+                            @endforeach
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección</label>
+                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección<font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="turn" id="turn" required>
                             <option value="Diurno" {{ $assistance_teacher->turn == 'Diurno' ? 'selected' : '' }}>Diurno</option>
                             <option value="Nocturno" {{ $assistance_teacher->turn == 'Nocturno' ? 'selected' : '' }}>Nocturno</option>
@@ -49,20 +54,20 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica</label>
+                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica<font color="red">*</font></label>
                       <textarea class="form-control" id="validationCustom01" name="didactic-unit" id="didactic-unit" required>{{ $assistance_teacher->didactic_unit }}</textarea>
                     </div>
 
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase</label>
+                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase<font color="red">*</font></label>
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
                             value="{{ date('Y-m-d H:i', strtotime($assistance_teacher->checkin_time) ) }}"
                           required>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase</label>
+                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase<font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
                             value="{{ date('Y-m-d H:i', strtotime($assistance_teacher->departure_time) ) }}" 
                           required>
@@ -71,14 +76,14 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje</label>
+                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje<font color="red">*</font></label>
                       <input type="text" class="form-control" name="theme" id="theme" value="{{ $assistance_teacher->theme }}" required>
                     </div>
 
                     <div class="mb-3">
                     <div class="form-group row">
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad</label>
+                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad<font color="red">*</font></label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="place" value="Aula" {{ $assistance_teacher->place == 'Aula' ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexRadioDefault1">Aula</label>
@@ -101,15 +106,15 @@
                     <div class="col-sm-6">
                     <label for="exampleFormControlInput1" class="form-label">Plataformas educativas de apoyo</label>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Moodle Institucional" {{ array_search("Moodle Institucional", $edplat) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Moodle Institucional" {{ in_array("Moodle Institucional", $edplat) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckDefault">Moodle Institucional</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Google Meet" {{ array_search("Google Meet", $edplat) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Google Meet" {{ in_array("Google Meet", $edplat) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckChecked">Google Meet</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Skipe" {{ array_search("Skipe", $edplat) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Skipe" {{ in_array("Skipe", $edplat) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckChecked">Skipe</label>
                       </div>
                       <div class="form-check">
@@ -127,8 +132,8 @@
                     </div>
 
                     <div class="mb-3">
-                      <button type="submit" class="btn btn-primary">Enviar</button>
-                      <a href="{{ route('assistance_teacher') }}" class="btn btn-secondary">Atras</a>
+                      <button type="submit" class="btn btn-primary">Guardar</button>
+                      <a href="{{ route('assistance_teacher') }}" class="btn btn-danger">Cancelar</a>
                     </div>
 
                   </form>

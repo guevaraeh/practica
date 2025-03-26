@@ -18,9 +18,6 @@
     <script type="text/javascript" src="{{ asset('/jquery/jquery-3.7.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/moment/moment.min.js') }}"></script>
 
-    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/fontawesome.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/fontawesome.min.js"></script>-->
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -41,6 +38,8 @@
 
     <link rel="stylesheet" href="{{ asset('/jquerydatetimepicker/jquery.datetimepicker.min.css') }}" />
     <script type="text/javascript" src="{{ asset('/jquerydatetimepicker/jquery.datetimepicker.full.min.js') }}"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
 
     <div id="content-wrapper" class="d-flex flex-column">
@@ -73,24 +72,6 @@
             </div>
           </div>
         </nav>
-
-        @if (Session::has('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>¡Exito!</strong> {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-        @endif
-
-        @if (Session::has('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>¡Error!</strong> {{ session('error') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-        @endif
 
         <!-- Contenido de la pagina -->
           @yield('content')

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssistanceTeacher;
+use App\Models\Period;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAssistanceTeacherRequest;
 use App\Http\Requests\UpdateAssistanceTeacherRequest;
@@ -62,13 +64,13 @@ class AssistanceTeacherController extends Controller
                                     if(strtotime($data->created_at) < strtotime($data->updated_at))
                                     {
                                         $updated = '<tr>
-                                                                <td><b><small>Actualizado</small></b></td>
-                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
+                                                                <td><b><small>Editado</small></b></td>
+                                                                <td><b><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small><b></td>
                                                             </tr>';
                                     }
                                     $links = 
-                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'">
-                                          Ver
+                                      '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'" title="Ver registro completo">
+                                          <i class="bi-eye"></i>
                                         </button>
 
                                         <div class="modal fade" id="modal'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -132,17 +134,14 @@ class AssistanceTeacherController extends Controller
                                                     </table>
                                                 </div>
                                               </div>
-                                              <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                              </div>
                                             </div>
                                           </div>
                                         </div>
                                     '.
-                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info">Editar</a>'
+                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
                                     .
-                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'">
-                                      Eliminar
+                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
+                                      <i class="bi-trash"></i>
                                     </button>
 
                                     <div class="modal fade" id="modaldelete'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -154,7 +153,7 @@ class AssistanceTeacherController extends Controller
                                           </div>
                                           <div class="modal-footer">
                                             <form method="POST" action="'.route('assistance_teacher.destroy',$data->id).'"> 
-                                                <input type="hidden" name="_token" value="bEOINYBBD0wsg4qEqDMo3UAL9inWsscyGiDhJJkL" autocomplete="off">                    
+                                                <input type="hidden" name="_token" value="'.csrf_token().'" autocomplete="off">                    
                                                 <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="btn btn-danger">Si</button>
                                             </form>
@@ -178,9 +177,10 @@ class AssistanceTeacherController extends Controller
     public function create()
     {
         //dd(date('Y-m-d H:i', time()));
+        $periods = Period::get();
 
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
-        return view('assistance_teacher.create',['teachers' => $teachers]);
+        return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => $periods]);
     }
 
     /**
@@ -227,7 +227,7 @@ class AssistanceTeacherController extends Controller
             'place' => $request->input('place'),
             'educational_platforms' => $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null,
             'remarks' => $request->input('remarks'),
-            'remember_token' => $request->input('_token'),
+            'remember_token' => Str::random(10),
         ]);
 
         return redirect(route('assistance_teacher'))->with('success', 'Asistencia registrada');
@@ -246,11 +246,15 @@ class AssistanceTeacherController extends Controller
      */
     public function edit(AssistanceTeacher $assistanceTeacher)
     {
-        $edplat= explode(', ',$assistanceTeacher->educational_platforms);
+        $edplat = $assistanceTeacher->educational_platforms ? explode(', ',$assistanceTeacher->educational_platforms) : [];
         //dd($edplat);
-        //dd(array_search('Aula', $edplat));
 
-        return view('assistance_teacher.edit',['assistance_teacher' => $assistanceTeacher, 'edplat' => $edplat]);
+        /*if(in_array("holo", $edplat))
+            dd("funciona");
+        else dd("No hay");*/
+        $periods = Period::get();
+
+        return view('assistance_teacher.edit',['assistance_teacher' => $assistanceTeacher, 'edplat' => $edplat, 'periods' => $periods]);
     }
 
     /**
@@ -299,7 +303,7 @@ class AssistanceTeacherController extends Controller
 
         $assistanceTeacher->training_module = $request->input('training-module');
         $assistanceTeacher->period = $request->input('period');
-        $assistanceTeacher->turn = $request->input('period');
+        $assistanceTeacher->turn = $request->input('turn');
         $assistanceTeacher->didactic_unit = $request->input('didactic-unit');
         $assistanceTeacher->checkin_time = date('Y-m-d H:i:s', strtotime($request->input('checkin-time')));
         $assistanceTeacher->departure_time = date('Y-m-d H:i:s', strtotime($request->input('departure-time')));
