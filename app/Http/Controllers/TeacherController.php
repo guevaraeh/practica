@@ -43,7 +43,7 @@ class TeacherController extends Controller
             'name' => $request->input('name'),
             'lastname' => $request->input('lastname')
         ]);
-        return redirect(route('teacher'));
+        return redirect(route('teacher'))->with('success', 'Profesor registrado');
     }
 
     /**
@@ -51,6 +51,12 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher, Request $request)
     {
+        /*$dates = [strtotime($teacher->created_at), strtotime($teacher->updated_at)];
+        dd($dates);*/
+        /*if(strtotime($teacher->created_at) < strtotime($teacher->updated_at))
+            dd(1);
+        else dd(0);*/
+        
         /*$assistances = DB::table('assistance_teachers')->where('teacher_id', $teacher->id)->orderBy('id', 'desc')->paginate(10);
         return view('teacher.show', ['teacher' => $teacher, 'assistances' => $assistances]);*/
 

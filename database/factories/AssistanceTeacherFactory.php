@@ -40,7 +40,8 @@ class AssistanceTeacherFactory extends Factory
             'period' => $period[rand(0,2)],
             'turn' => $turn[rand(0,1)],
             'didactic_unit' => fake()->paragraph(),
-
+            'checkin_time' => date('Y-m-d H:i', time()),
+            'departure_time' => date('Y-m-d H:i', strtotime('+3 hour')),
             'theme' => "Tema de hoy",
             'place' => $place[rand(0,2)],
             'educational_platforms' => $educational_platforms[rand(0,6)],

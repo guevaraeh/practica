@@ -58,6 +58,14 @@ class AssistanceTeacherController extends Controller
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
+                                    $updated = '';
+                                    if(strtotime($data->created_at) < strtotime($data->updated_at))
+                                    {
+                                        $updated = '<tr>
+                                                                <td><b><small>Actualizado</small></b></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
+                                                            </tr>';
+                                    }
                                     $links = 
                                       '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'">
                                           Ver
@@ -66,8 +74,8 @@ class AssistanceTeacherController extends Controller
                                         <div class="modal fade" id="modal'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog modal-lg modal-dialog-centered">
                                             <div class="modal-content">
-                                              <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
+                                              <div class="modal-header bg-primary">
+                                                <h5 class="modal-title text-light" id="exampleModalLabel"> Registro de '.date('Y-m-d h:i A', strtotime($data->created_at)).'</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                               </div>
                                               <div class="modal-body">
@@ -119,6 +127,7 @@ class AssistanceTeacherController extends Controller
                                                                 <td><b><small>Observaciones</small></b></td>
                                                                 <td><small>'.$data->remarks.'</small></td>
                                                             </tr>
+                                                            '.$updated.'
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -130,7 +139,31 @@ class AssistanceTeacherController extends Controller
                                           </div>
                                         </div>
                                     '.
-                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-secondary">Editar</a>';
+                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info">Editar</a>'
+                                    .
+                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'">
+                                      Eliminar
+                                    </button>
+
+                                    <div class="modal fade" id="modaldelete'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content">
+                                          <div class="modal-header bg-danger">
+                                            <h5 class="modal-title text-light" id="exampleModalLabel">¿Seguro que quieres eliminar el registro de asistencia de '.$data->teacher->lastname.' '.$data->teacher->name.' del '.date('Y-m-d h:i A', strtotime($data->created_at)).'?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <form method="POST" action="'.route('assistance_teacher.destroy',$data->id).'"> 
+                                                <input type="hidden" name="_token" value="bEOINYBBD0wsg4qEqDMo3UAL9inWsscyGiDhJJkL" autocomplete="off">                    
+                                                <input type="hidden" name="_method" value="DELETE">
+                                              <button type="submit" class="btn btn-danger">Si</button>
+                                            </form>
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>'
+                                    ;
                                     return $links;
                                 })
                                 ->rawColumns(['action'])
@@ -192,12 +225,12 @@ class AssistanceTeacherController extends Controller
             'departure_time' => date('Y-m-d H:i:s', strtotime($request->input('departure-time'))),
             'theme' => $request->input('theme'),
             'place' => $request->input('place'),
-            'educational_platforms' => implode(', ', $request->input('educational-platforms')),
+            'educational_platforms' => $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null,
             'remarks' => $request->input('remarks'),
             'remember_token' => $request->input('_token'),
         ]);
 
-        return redirect(route('assistance_teacher'));
+        return redirect(route('assistance_teacher'))->with('success', 'Asistencia registrada');
     }
 
     /**
@@ -262,6 +295,7 @@ class AssistanceTeacherController extends Controller
             'remarks' => $request->input('remarks'),
         ]);
         dd($data);*/
+        //dd($request->input('educational-platforms'));
 
         $assistanceTeacher->training_module = $request->input('training-module');
         $assistanceTeacher->period = $request->input('period');
@@ -271,12 +305,12 @@ class AssistanceTeacherController extends Controller
         $assistanceTeacher->departure_time = date('Y-m-d H:i:s', strtotime($request->input('departure-time')));
         $assistanceTeacher->theme = $request->input('theme');
         $assistanceTeacher->place = $request->input('place');
-        $assistanceTeacher->educational_platforms = implode(', ', $request->input('educational-platforms'));
+        $assistanceTeacher->educational_platforms = $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null;
         $assistanceTeacher->remarks = $request->input('remarks');
 
         $assistanceTeacher->save();
 
-        return redirect(route('assistance_teacher'));
+        return redirect(route('assistance_teacher'))->with('success', 'Registro cambiado');
         //->with('success','Product updated successfully')
     }
 
@@ -285,7 +319,8 @@ class AssistanceTeacherController extends Controller
      */
     public function destroy(AssistanceTeacher $assistanceTeacher)
     {
+        //dd($assistanceTeacher);
         $assistanceTeacher->delete();
-        return redirect(route('assistance_teacher'));
+        return redirect(route('assistance_teacher'))->with('success', 'Registro eliminado');
     }
 }
