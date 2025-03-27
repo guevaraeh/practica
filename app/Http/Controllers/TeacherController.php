@@ -150,7 +150,7 @@ class TeacherController extends Controller
                                                                 <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <th><small>Tema de actividad de aprensizaje</small></th>
+                                                                <th><small>Tema de actividad de aprendizaje</small></th>
                                                                 <td><small>'.$data->theme.'</small></td>
                                                             </tr>
                                                             <tr>
@@ -205,7 +205,7 @@ class TeacherController extends Controller
                                 ->make(true);
         }
 
-        return view('teacher.show',['teacher' => $teacher]);
+        return view('teacher.show',['teacher' => $teacher, 'periods' => Period::get()]);
     }
 
     /*public function ajaxshow(Request $request)

@@ -25,6 +25,7 @@ class AssistanceTeacherController extends Controller
             'assistance_teachers' => AssistanceTeacher::orderBy('id', 'desc')->paginate(10)
         ]);*/
         //SELECT DATE_FORMAT(checkin_time, "%Y/%m/%d %h:%i %r") FROM assistance_teachers WHERE 1
+
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
@@ -117,7 +118,7 @@ class AssistanceTeacherController extends Controller
                                                                 <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></th>
                                                             </tr>
                                                             <tr>
-                                                                <th><small>Tema de actividad de aprensizaje</small></th>
+                                                                <th><small>Tema de actividad de aprendizaje</small></th>
                                                                 <td><small>'.$data->theme.'</small></td>
                                                             </tr>
                                                             <tr>
@@ -171,7 +172,7 @@ class AssistanceTeacherController extends Controller
                                 ->rawColumns(['action'])
                                 ->make(true);
         }
-        return view('assistance_teacher.index');
+        return view('assistance_teacher.index', ['periods' => Period::get()]);
     }
 
     /**
@@ -180,12 +181,14 @@ class AssistanceTeacherController extends Controller
     public function create()
     {
         //dd(date('Y-m-d H:i', time()));
-        $periods = Period::get();
-
-
+        
+        /*$ar1 = ["Aula","Laboratorio","Taller"];
+        $ar2 = ["Aula","Laboratorio","Taller","Otro"];
+        $ar3 = ["Aula","Otro"];
+        dd(array_diff($ar3, $ar1));*/
 
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
-        return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => $periods]);
+        return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => Period::get()]);
     }
 
     public function confirm(StoreAssistanceTeacherRequest $request)

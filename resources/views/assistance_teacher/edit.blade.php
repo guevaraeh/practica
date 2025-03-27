@@ -97,9 +97,15 @@
                         <label class="form-check-label" for="flexRadioDefault2">Taller</label>
                       </div>
                       <div class="form-check">
+                        @if($assistance_teacher->place && !($assistance_teacher->place == 'Aula') && !($assistance_teacher->place == 'Laboratorio') && !($assistance_teacher->place == 'Taller'))
+                        <input class="form-check-input" type="radio" name="place" value="{{ $assistance_teacher->place }}" id="another-place" checked>
+                        <label class="form-check-label" for="flexRadioDefault2">Otros</label>
+                        <input type="text" class="form-control" id="ap" value="{{ $assistance_teacher->place }}" required>
+                        @else
                         <input class="form-check-input" type="radio" name="place" value="" id="another-place">
                         <label class="form-check-label" for="flexRadioDefault2">Otros</label>
                         <input type="text" class="form-control" id="ap" disabled>
+                        @endif
                       </div>
                     </div>
 
@@ -151,9 +157,15 @@ $( document ).ready(function() {
     $('input[name="place"]').change(function(){
         //alert( "otro" );
         if($('#another-place').is(':checked'))
+        {
             $('#ap').prop('disabled', false);
+            $('#ap').prop('required', true);
+        }
         else
+        {
+            $('#ap').prop('required', false);
             $('#ap').prop('disabled', true);
+        }
     });
 
     $('#ap').change(function() {

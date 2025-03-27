@@ -163,9 +163,15 @@ $( document ).ready(function() {
     $('input[name="place"]').change(function(){
         //alert( "otro" );
         if($('#another-place').is(':checked'))
+        {
             $('#ap').prop('disabled', false);
+            $('#ap').prop('required', true);
+        }
         else
+        {
+            $('#ap').prop('required', false);
             $('#ap').prop('disabled', true);
+        }
     });
 
     $('#ap').change(function() {

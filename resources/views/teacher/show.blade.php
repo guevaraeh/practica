@@ -28,7 +28,7 @@
                                             <th>Lugar</th>
                                             <th>Plataformas de apoyo</th>
                                             {{--<th>Observaciones</th>--}}
-                                            <th>Acción</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -130,7 +130,7 @@ $( document ).ready(function() {
                     });
                 });
 
-            this.api()
+            /*this.api()
                 .columns([1,2,3])
                 .every(function () {
                     let column = this;
@@ -156,7 +156,79 @@ $( document ).ready(function() {
                             .search(select.value, {exact: true})
                             .draw();
                     });
+                });*/
+
+            this.api()
+                .columns([1])
+                .every(function () {
+                    let column = this;
+     
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.setAttribute('class', 'form-select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+                    
+                    // Add list of options
+                    select.add(new Option('Profesional/Especialidad'));
+                    select.add(new Option('Transversal/Empleabilidad'));
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, {exact: true})
+                            .draw();
+                    });
                 });
+
+            this.api()
+                .columns([2])
+                .every(function () {
+                    let column = this;
+     
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.setAttribute('class', 'form-select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+                    
+                    // Add list of options
+                    @foreach ($periods as $period)
+                    select.add(new Option('{{ $period->name }}'));
+                    @endforeach
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, {exact: true})
+                            .draw();
+                    });
+                });
+
+            this.api()
+                .columns([3])
+                .every(function () {
+                    let column = this;
+     
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.setAttribute('class', 'form-select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+                    
+                    // Add list of options
+                    select.add(new Option('Diurno'));
+                    select.add(new Option('Nocturno'));
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, {exact: true})
+                            .draw();
+                    });
+                });
+
+
         }
 
     });
