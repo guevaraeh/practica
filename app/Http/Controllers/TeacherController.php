@@ -123,7 +123,7 @@ class TeacherController extends Controller
                                               <div class="modal-body">
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered">
+                                                    <table class="table table-hover">
                                                         <tbody>
                                                             <tr>
                                                                 <th><small>Módulo Formativo</small></th>

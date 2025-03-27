@@ -86,7 +86,7 @@ class AssistanceTeacherController extends Controller
                                               <div class="modal-body">
 
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered">
+                                                    <table class="table table-hover">
                                                         <tbody>
                                                             <tr>
                                                                 <th><small>Apellidos y Nombres</small></th>
@@ -182,7 +182,7 @@ class AssistanceTeacherController extends Controller
         //dd(date('Y-m-d H:i', time()));
         $periods = Period::get();
 
-        
+
 
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
         return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => $periods]);
