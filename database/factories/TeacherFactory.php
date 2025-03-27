@@ -21,7 +21,7 @@ class TeacherFactory extends Factory
         return [
             'name' => fake()->firstname(),
             'lastname' => fake()->lastname(),
-            //'remember_token' => Str::random(10)
+            'remember_token' => Str::random(50),
         ];
     }
 }

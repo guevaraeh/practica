@@ -27,8 +27,6 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            //$table->dateTimeTz('created_at', precision: 0)->useCurrent();
-            //$table->dateTimeTz('updated_at', precision: 0)->useCurrent();
             $table->softDeletes();
         });
     }

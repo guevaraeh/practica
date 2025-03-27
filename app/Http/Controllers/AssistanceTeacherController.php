@@ -215,7 +215,7 @@ class AssistanceTeacherController extends Controller
 
         //dd($request->collect());
 
-        AssistanceTeacher::insert([
+        /*AssistanceTeacher::insert([
             'teacher_id' => $request->input('teacher-id'),
             'training_module' => $request->input('training-module'),
             'period' => $request->input('period'),
@@ -228,7 +228,24 @@ class AssistanceTeacherController extends Controller
             'educational_platforms' => $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null,
             'remarks' => $request->input('remarks'),
             'remember_token' => Str::random(10),
-        ]);
+        ]);*/
+
+        $assistanceTeacher = new AssistanceTeacher;
+
+        $assistanceTeacher->teacher_id = $request->input('teacher-id');
+        $assistanceTeacher->training_module = $request->input('training-module');
+        $assistanceTeacher->period = $request->input('period');
+        $assistanceTeacher->turn = $request->input('turn');
+        $assistanceTeacher->didactic_unit = $request->input('didactic-unit');
+        $assistanceTeacher->checkin_time = date('Y-m-d H:i:s', strtotime($request->input('checkin-time')));
+        $assistanceTeacher->departure_time = date('Y-m-d H:i:s', strtotime($request->input('departure-time')));
+        $assistanceTeacher->theme = $request->input('theme');
+        $assistanceTeacher->place = $request->input('place');
+        $assistanceTeacher->educational_platforms = $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null;
+        $assistanceTeacher->remarks = $request->input('remarks');
+        $assistanceTeacher->remember_token = Str::random(50);
+        
+        $assistanceTeacher->save();
 
         return redirect(route('assistance_teacher'))->with('success', 'Asistencia registrada');
     }

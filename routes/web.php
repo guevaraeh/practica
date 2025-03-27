@@ -13,6 +13,7 @@ Route::get('/teacher', [TeacherController::class, 'index'])->name('teacher');
 Route::get('/teacher/create', [TeacherController::class, 'create'])->name('teacher.create');
 Route::post('/teacher/store', [TeacherController::class, 'store'])->name('teacher.store');
 Route::get('/teacher/{teacher}', [TeacherController::class, 'show'])->name('teacher.show');
+Route::delete('/teacher/{teacher}/destroy', [TeacherController::class, 'destroy'])->name('teacher.destroy');
 
 Route::get('/assistanceteacher', [AssistanceTeacherController::class, 'index'])->name('assistance_teacher');
 Route::get('/assistanceteacher/create', [AssistanceTeacherController::class, 'create'])->name('assistance_teacher.create');

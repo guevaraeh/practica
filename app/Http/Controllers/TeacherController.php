@@ -41,10 +41,17 @@ class TeacherController extends Controller
         //dd($request);
         //return redirect(route('teacher.create'));
         //return url(route('teacher.create'));
-        Teacher::insert([
+        /*Teacher::insert([
             'name' => $request->input('name'),
             'lastname' => $request->input('lastname')
-        ]);
+        ]);*/
+
+        $teacher = new Teacher;
+        $teacher->name = $request->input('name');
+        $teacher->lastname = $request->input('lastname');
+        $teacher->remember_token = Str::random(50);
+        $teacher->save();
+
         return redirect(route('teacher'))->with('success', 'Profesor registrado');
     }
 
@@ -234,6 +241,9 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
-        //
+        foreach ($teacher->assistances as $assistance)
+            $assistance->delete();
+        $teacher->delete();
+        return redirect(route('teacher'))->with('success', 'Profesor eliminado con sus registros');
     }
 }

@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Teacher;
+use App\Models\Period;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AssistanceTeacher>
@@ -18,11 +20,6 @@ class AssistanceTeacherFactory extends Factory
     public function definition(): array
     {
         $counter = Teacher::count();
-        $training_module = ["Profesional/Especialidad", "Transversal/Empleabilidad"];
-        $period = ["Segundo", "Cuarto", "Sexto"];
-        $turn = ["Diurno","Nocturno"];
-
-        $place = ["Aula","Laboratorio","Taller"];
 
         $educational_platforms = [
             "Moodle Institucional", 
@@ -35,18 +32,19 @@ class AssistanceTeacherFactory extends Factory
         ];
 
         return [
-            'teacher_id' => rand(1, $counter),
-            'training_module' => $training_module[rand(0,1)],
-            'period' => $period[rand(0,2)],
-            'turn' => $turn[rand(0,1)],
+            'teacher_id' => fake()->numberBetween(1, $counter),
+            //'teacher_id' => rand(1, $counter),
+            'training_module' => fake()->randomElement(["Profesional/Especialidad", "Transversal/Empleabilidad"]),
+            'period' => fake()->randomElement(["Segundo", "Cuarto", "Sexto"]),
+            'turn' => fake()->randomElement(["Diurno","Nocturno"]),
             'didactic_unit' => fake()->paragraph(),
             'checkin_time' => date('Y-m-d H:i', time()),
             'departure_time' => date('Y-m-d H:i', strtotime('+3 hour')),
-            'theme' => "Tema de hoy",
-            'place' => $place[rand(0,2)],
-            'educational_platforms' => $educational_platforms[rand(0,6)],
+            'theme' => fake()->sentence(),
+            'place' => fake()->randomElement(["Aula","Laboratorio","Taller","Otro"]),
+            'educational_platforms' => fake()->randomElement($educational_platforms),
             'remarks' => fake()->paragraph(),
-            //'remember_token' => Str::random(10)
+            'remember_token' => Str::random(50)
         ];
     }
 }
