@@ -12,22 +12,23 @@
                   <h6 class="m-0 font-weight-bold text-primary">Crear Asistencia</h6>
                 </div>
                 <div class="card-body">
-                  <form action="{{ route('assistance_teacher.store') }}" method="POST">
+                  <form action="{{ route('assistance_teacher.confirm') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                     <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Apellidos y Nombres<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Apellidos y Nombres</b><font color="red">*</font></label>
                           <select class="form-select selectto" aria-label="Default select example" name="teacher-id" id="teacher-id" required>
-                            <option>--Seleccione profesor--</option>
+                            <option selected disabled value="">--Seleccione profesor--</option>
                             @foreach($teachers as $teacher)
                                 <option value="{{ $teacher->id }}">{{ $teacher->lastname . ' ' . $teacher->name }}</option>
                             @endforeach
                           </select>
                       </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Módulo Formativo</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
+                            <option selected disabled value="">--Seleccione--</option>
                             <option value="Profesional/Especialidad">Profesional/Especialidad</option>
                             <option value="Transversal/Empleabilidad">Transversal/Empleabilidad</option>
                           </select>
@@ -38,8 +39,9 @@
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Período Académico<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Período Académico</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="period" id="period" required>
+                            <option selected disabled value="">--Seleccione--</option>
                             {{--
                             <option value="Segundo">Segundo</option>
                             <option value="Cuarto">Cuarto</option>
@@ -51,8 +53,9 @@
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Turno/Sección</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="turn" id="turn" required>
+                            <option selected disabled value="">--Seleccione--</option>
                             <option value="Diurno">Diurno</option>
                             <option value="Nocturno">Nocturno</option>
                           </select>
@@ -61,21 +64,21 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica<font color="red">*</font></label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Unidad Didáctica</b><font color="red">*</font></label>
                       <textarea class="form-control" id="validationCustom01" name="didactic-unit" id="didactic-unit" required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Hora de ingreso a clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
                             value="{{ date('Y-m-d H:i', time()) }}"
                             {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
                           required>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Hora de salida de clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
                             value="{{ date('Y-m-d H:i', strtotime('+3 hour')) }}" 
                             {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
@@ -85,14 +88,14 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje<font color="red">*</font></label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Tema de actividad de aprendizaje</b><font color="red">*</font></label>
                       <input type="text" class="form-control" name="theme" id="theme" required>
                     </div>
 
                     <div class="mb-3">
                     <div class="form-group row">
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad<font color="red">*</font></label>
+                    <label for="exampleFormControlInput1" class="form-label"><b>Lugar de realización de actividad</b><font color="red">*</font></label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="place" value="Aula" checked>
                         <label class="form-check-label" for="flexRadioDefault1">Aula</label>
@@ -113,7 +116,7 @@
                     </div>
 
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Plataformas educativas de apoyo</label>
+                    <label for="exampleFormControlInput1" class="form-label"><b>Plataformas educativas de apoyo</b></label>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Moodle Institucional" checked>
                         <label class="form-check-label" for="flexCheckDefault">Moodle Institucional</label>
@@ -136,7 +139,7 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Observaciones</label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Observaciones</b></label>
                       <textarea class="form-control" id="remarks" name="remarks"></textarea>
                     </div>
 

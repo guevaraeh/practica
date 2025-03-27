@@ -104,7 +104,7 @@ class TeacherController extends Controller
                                     if(strtotime($data->created_at) < strtotime($data->updated_at))
                                     {
                                         $updated = '<tr>
-                                                                <td><b><small>Editado</small></b></td>
+                                                                <th><small>Editado</small></th>
                                                                 <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
                                                             </tr>';
                                     }
@@ -126,43 +126,43 @@ class TeacherController extends Controller
                                                     <table class="table table-hover table-bordered">
                                                         <tbody>
                                                             <tr>
-                                                                <td><b><small>Módulo Formativo</small></b></td>
+                                                                <th><small>Módulo Formativo</small></th>
                                                                 <td><small>'.$data->training_module.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Período Académico</small></b></td>
+                                                                <th><small>Período Académico</small></th>
                                                                 <td><small>'.$data->period.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Turno/Sección</small></b></td>
+                                                                <th><small>Turno/Sección</small></th>
                                                                 <td><small>'.$data->turn.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Unidad Didáctica</small></b></td>
+                                                                <th><small>Unidad Didáctica</small></th>
                                                                 <td><small>'.$data->didactic_unit.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Hora de ingreso</small></b></td>
+                                                                <th><small>Hora de ingreso</small></th>
                                                                 <td><small>'.date('Y-m-d h:i A', strtotime($data->checkin_time)).'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Hora de salida</small></b></td>
+                                                                <th><small>Hora de salida</small></th>
                                                                 <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Tema de actividad de aprensizaje</small></b></td>
+                                                                <th><small>Tema de actividad de aprensizaje</small></th>
                                                                 <td><small>'.$data->theme.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Lugar de realización de actividad</small></b></td>
+                                                                <th><small>Lugar de realización de actividad</small></th>
                                                                 <td><small>'.$data->place.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Plataformas educativas de apoyo</small></b></td>
+                                                                <th><small>Plataformas educativas de apoyo</small></th>
                                                                 <td><small>'.$data->educational_platforms.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Observaciones</small></b></td>
+                                                                <th><small>Observaciones</small></th>
                                                                 <td><small>'.$data->remarks.'</small></td>
                                                             </tr>
                                                             '.$updated.'

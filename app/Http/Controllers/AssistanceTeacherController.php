@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AssistanceTeacher;
+use App\Models\Teacher;
 use App\Models\Period;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -27,17 +28,19 @@ class AssistanceTeacherController extends Controller
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
-                ->select([DB::raw("CONCAT(teachers.lastname,' ',teachers.name) as teacher_name"),'assistance_teachers.*'])
+                ->select([DB::raw("CONCAT(teachers.lastname,' ',teachers.name) as teacher_name"),'assistance_teachers.*']) //periods.name
                 ->join('teachers', 'assistance_teachers.teacher_id', '=', 'teachers.id')
+                //->join('periods', 'assistance_teachers.period_id', '=', 'period.id')
                 ->orderBy('assistance_teachers.id', 'desc');
             return DataTables::eloquent($assistance_teachers)
-                                /*->addColumn('teacher_name',function (AssistanceTeacher $data){
-                                    return $data->teacher->lastname .' '. $data->teacher->name;
-                                })*/
                                 ->filterColumn('teacher_name', function($query, $keyword) {
                                     $sql = "CONCAT(teachers.lastname,' ',teachers.name) like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
+                                /*->filterColumn('period', function($query, $keyword) {
+                                    $sql = "periods.name like ?";
+                                    $query->whereRaw($sql, ["%{$keyword}%"]);
+                                })*/
                                 ->editColumn('created_at', function(AssistanceTeacher $data) {
                                     return date('Y/m/d h:i A', strtotime($data->created_at));
                                 })
@@ -64,8 +67,8 @@ class AssistanceTeacherController extends Controller
                                     if(strtotime($data->created_at) < strtotime($data->updated_at))
                                     {
                                         $updated = '<tr>
-                                                                <td><b><small>Editado</small></b></td>
-                                                                <td><b><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small><b></td>
+                                                                <th><small>Editado</small></th>
+                                                                <th><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></th>
                                                             </tr>';
                                     }
                                     $links = 
@@ -86,47 +89,47 @@ class AssistanceTeacherController extends Controller
                                                     <table class="table table-hover table-bordered">
                                                         <tbody>
                                                             <tr>
-                                                                <td><b><small>Apellidos y Nombres</small></b></td>
+                                                                <th><small>Apellidos y Nombres</small></th>
                                                                 <td><small>'.$data->teacher->lastname.' '.$data->teacher->name.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Módulo Formativo</small></b></td>
+                                                                <th><small>Módulo Formativo</small></th>
                                                                 <td><small>'.$data->training_module.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Período Académico</small></b></td>
+                                                                <th><small>Período Académico</small></th>
                                                                 <td><small>'.$data->period.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Turno/Sección</small></b></td>
+                                                                <th><small>Turno/Sección</small></th>
                                                                 <td><small>'.$data->turn.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Unidad Didáctica</small></b></td>
+                                                                <th><small>Unidad Didáctica</small></th>
                                                                 <td><small>'.$data->didactic_unit.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Hora de ingreso</small></b></td>
-                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->checkin_time)).'</small></td>
+                                                                <th><small>Hora de ingreso</small></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->checkin_time)).'</small></th>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Hora de salida</small></b></td>
-                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></td>
+                                                                <th><small>Hora de salida</small></td>
+                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->departure_time)).'</small></th>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Tema de actividad de aprensizaje</small></b></td>
+                                                                <th><small>Tema de actividad de aprensizaje</small></th>
                                                                 <td><small>'.$data->theme.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Lugar de realización de actividad</small></b></td>
+                                                                <th><small>Lugar de realización de actividad</small></th>
                                                                 <td><small>'.$data->place.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Plataformas educativas de apoyo</small></b></td>
+                                                                <th><small>Plataformas educativas de apoyo</small></th>
                                                                 <td><small>'.$data->educational_platforms.'</small></td>
                                                             </tr>
                                                             <tr>
-                                                                <td><b><small>Observaciones</small></b></td>
+                                                                <th><small>Observaciones</small></th>
                                                                 <td><small>'.$data->remarks.'</small></td>
                                                             </tr>
                                                             '.$updated.'
@@ -179,8 +182,31 @@ class AssistanceTeacherController extends Controller
         //dd(date('Y-m-d H:i', time()));
         $periods = Period::get();
 
+        
+
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
         return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => $periods]);
+    }
+
+    public function confirm(StoreAssistanceTeacherRequest $request)
+    {
+        $validated = $request->validate([
+            'teacher-id' => 'required',
+            'training-module' => 'required',
+            'period' => 'required',
+            'turn' => 'required',
+            'didactic-unit' => 'required',
+            //'checkin-time' => 'required',
+            //'departure-time' => 'required',
+            'theme' => 'required',
+            'place' => 'required',
+        ]);
+
+        //$teacher = Teacher::find($request->input('teacher-id'));
+
+        //dd($request->collect());
+
+        return view('assistance_teacher.confirm',['assistance' => $request, 'teacher' => Teacher::find($request->input('teacher-id'))]);
     }
 
     /**
@@ -214,21 +240,6 @@ class AssistanceTeacherController extends Controller
         //dd( date('Y-m-d H:i:s', strtotime($request->input('departure-time'))) );
 
         //dd($request->collect());
-
-        /*AssistanceTeacher::insert([
-            'teacher_id' => $request->input('teacher-id'),
-            'training_module' => $request->input('training-module'),
-            'period' => $request->input('period'),
-            'turn' => $request->input('turn'),
-            'didactic_unit' => $request->input('didactic-unit'),
-            'checkin_time' => date('Y-m-d H:i:s', strtotime($request->input('checkin-time'))),
-            'departure_time' => date('Y-m-d H:i:s', strtotime($request->input('departure-time'))),
-            'theme' => $request->input('theme'),
-            'place' => $request->input('place'),
-            'educational_platforms' => $request->input('educational-platforms') ? implode(', ', $request->input('educational-platforms')) : null,
-            'remarks' => $request->input('remarks'),
-            'remember_token' => Str::random(10),
-        ]);*/
 
         $assistanceTeacher = new AssistanceTeacher;
 
@@ -294,29 +305,6 @@ class AssistanceTeacherController extends Controller
         ]);*/
 
         //dd($request->collect());
-
-        /*$data = $validated;
-        $data['checkin_time'] = date('Y-m-d H:i:s', strtotime($data['checkin_time']));
-        $data['departure_time'] = date('Y-m-d H:i:s', strtotime($data['departure_time']));
-        $data['educational_platforms'] = implode(', ', $data['educational_platforms']);
-
-        $assistanceTeacher->update($data);*/
-
-        /*$data = AssistanceTeacher::find($assistanceTeacher->id);
-        $data->update([
-            'training_module' => $request->input('training-module'),
-            'period' => $request->input('period'),
-            'turn' => $request->input('turn'),
-            'didactic_unit' => $request->input('didactic-unit'),
-            'checkin_time' => date('Y-m-d H:i:s', strtotime($request->input('checkin-time'))),
-            'departure_time' => date('Y-m-d H:i:s', strtotime($request->input('departure-time'))),
-            'theme' => $request->input('theme'),
-            'place' => $request->input('place'),
-            'educational_platforms' => implode(', ', $request->input('educational-platforms')),
-            'remarks' => $request->input('remarks'),
-        ]);
-        dd($data);*/
-        //dd($request->input('educational-platforms'));
 
         $assistanceTeacher->training_module = $request->input('training-module');
         $assistanceTeacher->period = $request->input('period');

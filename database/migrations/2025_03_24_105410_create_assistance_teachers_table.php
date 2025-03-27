@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('teacher_id');
             //$table->foreignIdFor(Teacher::class);
             $table->string('training_module', length: 100);
-            $table->string('period', length: 100);
+            $table->string('period', length: 100); //$table->foreignId('period_id');
             $table->string('turn', length: 50);
             $table->text('didactic_unit');
             $table->dateTime('checkin_time', precision: 0)->nullable()->useCurrent();

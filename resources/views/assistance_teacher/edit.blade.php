@@ -19,7 +19,7 @@
                     <div class="mb-3">
                     <div class="form-group row">
                         <div class="col-sm-12">
-                          <label for="exampleFormControlInput1" class="form-label">Módulo Formativo<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Módulo Formativo</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
                             <option value="Profesional/Especialidad" {{ $assistance_teacher->training_module == 'Profesional/Especialidad' ? 'selected' : '' }}>Profesional/Especialidad</option>
                             <option value="Transversal/Empleabilidad"{{ $assistance_teacher->training_module == 'Transversal/Empleabilidad' ? 'selected' : '' }}>Transversal/Empleabilidad</option>
@@ -31,7 +31,7 @@
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Período Académico<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Período Académico</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="period" id="period" required>
                             {{--
                             <option value="Segundo" {{ $assistance_teacher->period == 'Segundo' ? 'selected' : '' }}>Segundo</option>
@@ -44,7 +44,7 @@
                           </select>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Turno/Sección<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Turno/Sección</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="turn" id="turn" required>
                             <option value="Diurno" {{ $assistance_teacher->turn == 'Diurno' ? 'selected' : '' }}>Diurno</option>
                             <option value="Nocturno" {{ $assistance_teacher->turn == 'Nocturno' ? 'selected' : '' }}>Nocturno</option>
@@ -54,20 +54,20 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Unidad Didáctica<font color="red">*</font></label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Unidad Didáctica</b><font color="red">*</font></label>
                       <textarea class="form-control" id="validationCustom01" name="didactic-unit" id="didactic-unit" required>{{ $assistance_teacher->didactic_unit }}</textarea>
                     </div>
 
                     <div class="mb-3">
                         <div class="form-group row">
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de ingreso a clase<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Hora de ingreso a clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
                             value="{{ date('Y-m-d H:i', strtotime($assistance_teacher->checkin_time) ) }}"
                           required>
                         </div>
                         <div class="col-sm-6">
-                          <label for="exampleFormControlInput1" class="form-label">Hora de salida de clase<font color="red">*</font></label>
+                          <label for="exampleFormControlInput1" class="form-label"><b>Hora de salida de clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
                             value="{{ date('Y-m-d H:i', strtotime($assistance_teacher->departure_time) ) }}" 
                           required>
@@ -76,14 +76,14 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Tema de actividad de aprendizaje<font color="red">*</font></label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Tema de actividad de aprendizaje</b><font color="red">*</font></label>
                       <input type="text" class="form-control" name="theme" id="theme" value="{{ $assistance_teacher->theme }}" required>
                     </div>
 
                     <div class="mb-3">
                     <div class="form-group row">
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Lugar de realización de actividad<font color="red">*</font></label>
+                    <label for="exampleFormControlInput1" class="form-label"><b>Lugar de realización de actividad</b><font color="red">*</font></label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="place" value="Aula" {{ $assistance_teacher->place == 'Aula' ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexRadioDefault1">Aula</label>
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="col-sm-6">
-                    <label for="exampleFormControlInput1" class="form-label">Plataformas educativas de apoyo</label>
+                    <label for="exampleFormControlInput1" class="form-label"><b>Plataformas educativas de apoyo</b></label>
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="educational-platforms[]" value="Moodle Institucional" {{ in_array("Moodle Institucional", $edplat) ? 'checked' : '' }}>
                         <label class="form-check-label" for="flexCheckDefault">Moodle Institucional</label>
@@ -127,7 +127,7 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Observaciones</label>
+                      <label for="exampleFormControlInput1" class="form-label"><b>Observaciones</b></label>
                       <textarea class="form-control" id="remarks" name="remarks" >{{ $assistance_teacher->remarks }}</textarea>
                     </div>
 

@@ -17,6 +17,7 @@ Route::delete('/teacher/{teacher}/destroy', [TeacherController::class, 'destroy'
 
 Route::get('/assistanceteacher', [AssistanceTeacherController::class, 'index'])->name('assistance_teacher');
 Route::get('/assistanceteacher/create', [AssistanceTeacherController::class, 'create'])->name('assistance_teacher.create');
+Route::post('/assistanceteacher/confirm', [AssistanceTeacherController::class, 'confirm'])->name('assistance_teacher.confirm');
 Route::post('/assistanceteacher/store', [AssistanceTeacherController::class, 'store'])->name('assistance_teacher.store');
 Route::get('/assistanceteacher/{assistanceTeacher}', [AssistanceTeacherController::class, 'show'])->name('assistance_teacher.show');
 Route::get('/assistanceteacher/{assistanceTeacher}/edit', [AssistanceTeacherController::class, 'edit'])->name('assistance_teacher.edit');
