@@ -182,9 +182,15 @@ $( document ).ready(function() {
     $('input[name="educational-platforms[]"]').change(function(){
         //alert( "otro" );
         if($('#another-platform').is(':checked'))
+        {
             $('#apf').prop('disabled', false);
+            $('#apf').prop('required', true);
+        }
         else
+        {
+            $('#apf').prop('required', false);
             $('#apf').prop('disabled', true);
+        }
     });
 
     $('#apf').change(function() {

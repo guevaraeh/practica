@@ -181,11 +181,6 @@ class AssistanceTeacherController extends Controller
     public function create()
     {
         //dd(date('Y-m-d H:i', time()));
-        
-        /*$ar1 = ["Aula","Laboratorio","Taller"];
-        $ar2 = ["Aula","Laboratorio","Taller","Otro"];
-        $ar3 = ["Aula","Otro"];
-        dd(array_diff($ar3, $ar1));*/
 
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
         return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => Period::get()]);
@@ -279,6 +274,12 @@ class AssistanceTeacherController extends Controller
     {
         $edplat = $assistanceTeacher->educational_platforms ? explode(', ',$assistanceTeacher->educational_platforms) : [];
         //dd($edplat);
+        /*//$ar1 = ['Moodle Institucional','Google Meet','Skipe'];
+        $ar2 = ['Moodle Institucional','Google Meet','Skipe','Otro'];
+        $ar3 = ['Moodle Institucional','Otro'];
+        //dd($edplat);
+        dd(array_diff($edplat, ['Moodle Institucional','Google Meet','Skipe']));*/
+
 
         /*if(in_array("holo", $edplat))
             dd("funciona");

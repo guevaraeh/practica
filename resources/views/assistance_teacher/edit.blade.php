@@ -124,9 +124,15 @@
                         <label class="form-check-label" for="flexCheckChecked">Skipe</label>
                       </div>
                       <div class="form-check">
+                        @if(array_diff($edplat, ['Moodle Institucional','Google Meet','Skipe']) != [] )
+                        <input class="form-check-input" type="checkbox" name="educational-platforms[]" id="another-platform" value="{{ end($edplat) }}" checked>
+                        <label class="form-check-label" for="flexCheckChecked">Otros</label>
+                        <input type="text" class="form-control" id="apf" value="{{ end($edplat) }}" required>
+                        @else
                         <input class="form-check-input" type="checkbox" name="educational-platforms[]" id="another-platform" value="">
                         <label class="form-check-label" for="flexCheckChecked">Otros</label>
                         <input type="text" class="form-control" id="apf" disabled>
+                        @endif
                       </div>
                     </div>
                     </div>
@@ -176,9 +182,15 @@ $( document ).ready(function() {
     $('input[name="educational-platforms[]"]').change(function(){
         //alert( "otro" );
         if($('#another-platform').is(':checked'))
+        {
             $('#apf').prop('disabled', false);
+            $('#apf').prop('required', true);
+        }
         else
+        {
+            $('#apf').prop('required', false);
             $('#apf').prop('disabled', true);
+        }
     });
 
     $('#apf').change(function() {

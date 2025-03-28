@@ -5,7 +5,7 @@ use App\Http\Controllers\AssistanceTeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    //return view('dashboard');
+    //return view('welcome');
     return redirect(route('assistance_teacher.create'));
 });
 
