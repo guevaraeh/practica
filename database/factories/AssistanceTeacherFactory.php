@@ -24,11 +24,11 @@ class AssistanceTeacherFactory extends Factory
         $educational_platforms = [
             "Moodle Institucional", 
             "Google Meet", 
-            "Otro", 
+            fake()->word(), 
             "Moodle Institucional, Google Meet", 
-            "Google Meet, Otro", 
-            "Moodle Institucional, Otro", 
-            "Moodle Institucional, Google Meet, Otro"
+            "Google Meet, ".fake()->word(), 
+            "Moodle Institucional, ".fake()->word(), 
+            "Moodle Institucional, Google Meet, ".fake()->word()
         ];
 
         return [
@@ -41,7 +41,7 @@ class AssistanceTeacherFactory extends Factory
             'checkin_time' => date('Y-m-d H:i', time()),
             'departure_time' => date('Y-m-d H:i', strtotime('+3 hour')),
             'theme' => fake()->sentence(),
-            'place' => fake()->randomElement(["Aula","Laboratorio","Taller","Otro"]),
+            'place' => fake()->randomElement(["Aula","Laboratorio","Taller",fake()->word()]),
             'educational_platforms' => fake()->randomElement($educational_platforms),
             'remarks' => fake()->paragraph(),
             'remember_token' => Str::random(50)

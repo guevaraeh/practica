@@ -79,15 +79,15 @@ class TeacherController extends Controller
                 ->orderBy('id', 'desc');
             return DataTables::eloquent($assistance_teachers)
                                 ->editColumn('created_at', function(AssistanceTeacher $data) {
-                                    return date('Y/m/d h:i A', strtotime($data->created_at));
+                                    return date('Y-m-d h:i A', strtotime($data->created_at));
                                 })
                                 ->editColumn('checkin_time', function(AssistanceTeacher $data) {
-                                    return date('Y/m/d h:i A', strtotime($data->checkin_time));
+                                    return date('Y-m-d h:i A', strtotime($data->checkin_time));
                                 })
                                 ->editColumn('departure_time', function(AssistanceTeacher $data) {
-                                    return date('Y/m/d h:i A', strtotime($data->departure_time));
+                                    return date('Y-m-d h:i A', strtotime($data->departure_time));
                                 })
-                                ->filterColumn('checkin_time', function($query, $keyword) {
+                                ->filterColumn('created_at', function($query, $keyword) {
                                     $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %h:%i %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })

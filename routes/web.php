@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AssistanceTeacherController;
+use App\Http\Controllers\PeriodController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,3 +24,5 @@ Route::get('/assistanceteacher/{assistanceTeacher}', [AssistanceTeacherControlle
 Route::get('/assistanceteacher/{assistanceTeacher}/edit', [AssistanceTeacherController::class, 'edit'])->name('assistance_teacher.edit');
 Route::put('/assistanceteacher/{assistanceTeacher}/update', [AssistanceTeacherController::class, 'update'])->name('assistance_teacher.update');
 Route::delete('/assistanceteacher/{assistance_teacher}/destroy', [AssistanceTeacherController::class, 'destroy'])->name('assistance_teacher.destroy');
+
+Route::get('/period', [PeriodController::class, 'index'])->name('period');

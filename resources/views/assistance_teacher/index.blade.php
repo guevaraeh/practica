@@ -7,7 +7,7 @@
 @section('content')
 <div class="container-fluid">
             <div class="col-lg-12">
-                @include('includes.alert')
+                {{--@include('includes.alert')--}}
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
@@ -16,6 +16,23 @@
                     {{-- $assistance_teachers->links() --}}
                   <div class="table-responsive">
                                 <table class="table table-hover" id="datat">
+                                    <thead>
+                                        <tr>
+                                            <th>Buscar</th>
+                                            <th>Buscar</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            {{--<th></th>--}}
+                                            <th>Buscar</th>
+                                            <th>Buscar</th>
+                                            {{--<th></th>--}}
+                                            <th>Buscar</th>
+                                            <th>Buscar</th>
+                                            {{--<th>Buscar</th>--}}
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
                                     <thead>
                                         <tr class="table-secondary">
                                             <th>Fecha de subida</th>
@@ -90,16 +107,18 @@
 <script>
 $( document ).ready(function() {
 
-    /*$('#datat').DataTable({
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
-        }
+    $.datetimepicker.setLocale('es');
+
+    /*$('.datepickersearch').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
     });*/
 
     $('#datat').DataTable({
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
         },
+        pageLength: 25,
         processing: true,
         serverSide: true,
         ajax:"{{ route('assistance_teacher') }}",
@@ -119,19 +138,19 @@ $( document ).ready(function() {
             {data:'action', name:'action'},
         ],
         initComplete: function () {
-            //$("#dt-length-0").attr("class","form-select");
-            //$("#dt-search-0").attr("class","form-control");
             this.api()
                 .columns([0,1,5,6,7,8])
                 .every(function () {
                     let column = this;
-                    let title = column.footer().textContent;
+                    let title = column.header().textContent;
      
                     // Create input element
                     let input = document.createElement('input');
                     input.placeholder = title;
+                    //input.setAttribute('class', 'form-control datepickersearch');
                     input.setAttribute('class', 'form-control');
-                    column.footer().replaceChildren(input);
+                    //column.footer().replaceChildren(input);
+                    column.header().replaceChildren(input);
      
                     // Event listener for user input
                     input.addEventListener('keyup', () => {
@@ -178,7 +197,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     select.add(new Option('Profesional/Especialidad'));
@@ -201,7 +221,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     @foreach ($periods as $period)
@@ -225,7 +246,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     select.add(new Option('Diurno'));
@@ -243,6 +265,21 @@ $( document ).ready(function() {
         }
 
     });
+    
+
+    /*$('.swalDefaultSuccess').click(function(){
+        Swal.fire({
+            title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        })
+    });*/
+
+    @if(Session::has('success'))
+    toastr.success('<strong>¡Exito!</strong><br>'+'{{ session("success") }}');
+    @endif
 
 });
 </script>

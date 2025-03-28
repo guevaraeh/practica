@@ -12,9 +12,24 @@
                   <h6 class="m-0 font-weight-bold text-primary">Registro de asistencias de {{ $teacher->name . ' ' . $teacher->lastname }}</h6>
                 </div>
                 <div class="card-body">
-                    {{-- $assistances->links() --}}
                   <div class="table-responsive">
                                 <table class="table table-hover" id="datat">
+                                    <thead>
+                                        <tr>
+                                            <th>Buscar</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            {{--<th></th>--}}
+                                            <th>Buscar</th>
+                                            <th>Buscar</th>
+                                            {{--<th></th>--}}
+                                            <th>Buscar</th>
+                                            <th>Buscar</th>
+                                            {{--<th>Buscar</th>--}}
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
                                     <thead>
                                         <tr class="table-secondary">
                                             <th>Fecha de subida</th>
@@ -89,6 +104,7 @@ $( document ).ready(function() {
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
         },
+        pageLength: 25,
         processing: true,
         serverSide: true,
         ajax:"{{ route('teacher.show', $teacher->id) }}",
@@ -114,13 +130,14 @@ $( document ).ready(function() {
                 .columns([0,4,5,6,7])
                 .every(function () {
                     let column = this;
-                    let title = column.footer().textContent;
+                    let title = column.header().textContent;
      
                     // Create input element
                     let input = document.createElement('input');
                     input.placeholder = title;
                     input.setAttribute('class', 'form-control');
-                    column.footer().replaceChildren(input);
+                    //column.footer().replaceChildren(input);
+                    column.header().replaceChildren(input);
      
                     // Event listener for user input
                     input.addEventListener('keyup', () => {
@@ -167,7 +184,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     select.add(new Option('Profesional/Especialidad'));
@@ -190,7 +208,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     @foreach ($periods as $period)
@@ -214,7 +233,8 @@ $( document ).ready(function() {
                     let select = document.createElement('select');
                     select.setAttribute('class', 'form-select');
                     select.add(new Option(''));
-                    column.footer().replaceChildren(select);
+                    //column.footer().replaceChildren(select);
+                    column.header().replaceChildren(select);
                     
                     // Add list of options
                     select.add(new Option('Diurno'));
@@ -232,6 +252,10 @@ $( document ).ready(function() {
         }
 
     });
+
+    @if(Session::has('success'))
+    toastr.success('<strong>¡Exito!</strong><br>'+'{{ session("success") }}');
+    @endif
 
 });
 </script>

@@ -19,13 +19,6 @@ class AssistanceTeacherController extends Controller
      */
     public function index(Request $request)
     {
-        //$assistance_teachers = AssistanceTeacher::get();
-        //return view('assistance_teacher.index',['assistance_teachers' => $assistance_teachers]);
-        /*return view('assistance_teacher.index', [
-            'assistance_teachers' => AssistanceTeacher::orderBy('id', 'desc')->paginate(10)
-        ]);*/
-        //SELECT DATE_FORMAT(checkin_time, "%Y/%m/%d %h:%i %r") FROM assistance_teachers WHERE 1
-
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
@@ -43,7 +36,7 @@ class AssistanceTeacherController extends Controller
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })*/
                                 ->editColumn('created_at', function(AssistanceTeacher $data) {
-                                    return date('Y/m/d h:i A', strtotime($data->created_at));
+                                    return date('Y-m-d h:i A', strtotime($data->created_at));
                                 })
                                 ->editColumn('checkin_time', function(AssistanceTeacher $data) {
                                     return date('Y-m-d h:i A', strtotime($data->checkin_time));
@@ -51,8 +44,8 @@ class AssistanceTeacherController extends Controller
                                 ->editColumn('departure_time', function(AssistanceTeacher $data) {
                                     return date('Y-m-d h:i A', strtotime($data->departure_time));
                                 })
-                                ->filterColumn('checkin_time', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %h:%i %r') like ?";
+                                ->filterColumn('assistance_teachers.created_at', function($query, $keyword) {
+                                    $sql = "DATE_FORMAT(assistance_teachers.created_at, '%Y/%m/%d %h:%i %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->filterColumn('checkin_time', function($query, $keyword) {
@@ -294,8 +287,6 @@ class AssistanceTeacherController extends Controller
      */
     public function update(UpdateAssistanceTeacherRequest $request, AssistanceTeacher $assistanceTeacher)
     {
-        //dd($request->collect());
-
         /*$validated = $request->validate([
             'teacher-id' => 'required',
             'training-module' => 'required',
@@ -324,7 +315,6 @@ class AssistanceTeacherController extends Controller
         $assistanceTeacher->save();
 
         return redirect(route('assistance_teacher'))->with('success', 'Registro cambiado');
-        //->with('success','Product updated successfully')
     }
 
     /**
