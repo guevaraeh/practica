@@ -22,22 +22,24 @@
                                 <table class="table table-hover" id="datat">
                                     <thead>
                                         <tr>
-                                            <th>Buscar</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <!--<th></th>-->
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="select-module"></th>
+                                            <th class="select-period"></th>
+                                            <th class="select-turn"></th>
                                             {{--<th></th>--}}
-                                            <th>Buscar</th>
-                                            <th>Buscar</th>
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="input-filter">Buscar</th>
                                             {{--<th></th>--}}
-                                            <th>Buscar</th>
-                                            <th>Buscar</th>
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="input-filter">Buscar</th>
                                             {{--<th>Buscar</th>--}}
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <thead>
                                         <tr class="table-light">
+                                            <!--<th></th>-->
                                             <th>Fecha de subida</th>
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
@@ -133,7 +135,7 @@ $( document ).ready(function() {
             //$("#dt-length-0").attr("class","form-select");
             //$("#dt-search-0").attr("class","form-control");
             this.api()
-                .columns([0,4,5,6,7])
+                .columns('.input-filter')
                 .every(function () {
                     let column = this;
                     let title = column.header().textContent;
@@ -182,7 +184,7 @@ $( document ).ready(function() {
                 });*/
 
             this.api()
-                .columns([1])
+                .columns('.select-module')
                 .every(function () {
                     let column = this;
      
@@ -206,7 +208,7 @@ $( document ).ready(function() {
                 });
 
             this.api()
-                .columns([2])
+                .columns('.select-period')
                 .every(function () {
                     let column = this;
      
@@ -231,7 +233,7 @@ $( document ).ready(function() {
                 });
 
             this.api()
-                .columns([3])
+                .columns('.select-turn')
                 .every(function () {
                     let column = this;
      

@@ -12,6 +12,8 @@ class PeriodController extends Controller
      */
     public function index()
     {
+        //dd(Period::pluck('name'));
+
         return view('period.index',['periods' => Period::get()]);
     }
 

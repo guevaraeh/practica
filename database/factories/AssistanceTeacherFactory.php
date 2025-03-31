@@ -20,6 +20,7 @@ class AssistanceTeacherFactory extends Factory
     public function definition(): array
     {
         $counter = Teacher::count();
+        $periods = Period::pluck('name');
 
         $educational_platforms = [
             "Moodle Institucional", 
@@ -35,7 +36,7 @@ class AssistanceTeacherFactory extends Factory
             'teacher_id' => fake()->numberBetween(1, $counter),
             //'teacher_id' => rand(1, $counter),
             'training_module' => fake()->randomElement(["Profesional/Especialidad", "Transversal/Empleabilidad"]),
-            'period' => fake()->randomElement(["Segundo", "Cuarto", "Sexto"]),
+            'period' => fake()->randomElement($periods),
             'turn' => fake()->randomElement(["Diurno","Nocturno"]),
             'didactic_unit' => fake()->paragraph(),
             'checkin_time' => date('Y-m-d H:i', time()),

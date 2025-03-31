@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('didactic_unit');
             $table->dateTime('checkin_time', precision: 0)->nullable()->useCurrent();
             $table->dateTime('departure_time', precision: 0)->nullable()->useCurrent();
-            $table->string('theme', length: 200);
+            $table->string('theme', length: 250);
             $table->string('place', length: 100);
             $table->string('educational_platforms', length: 200)->nullable();
             $table->text('remarks')->nullable();

@@ -75,14 +75,20 @@
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
                             {{--value="{{ date('Y-m-d H:i', time()) }}"--}}
                             value="{{ date('Y-m-d h:i A', time()) }}"
-                          required>
+                          readonly required>
+                            @error('checkin-time')
+                            <div class="invalid-feedback">Fecha y hora inválidos.</div>
+                            @enderror
                         </div>
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Hora de salida de clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
                             {{--value="{{ date('Y-m-d H:i', strtotime('+3 hour')) }}"--}} 
                             value="{{ date('Y-m-d h:i A', strtotime('+3 hour')) }}"
-                          required>
+                          readonly required>
+                            @error('departure-time')
+                            <div class="invalid-feedback">Fecha y hora inválidos.</div>
+                            @enderror
                         </div>
                         </div>
                     </div>
@@ -90,6 +96,9 @@
                     <div class="mb-3">
                       <label for="exampleFormControlInput1" class="form-label"><b>Tema de actividad de aprendizaje</b><font color="red">*</font></label>
                       <input type="text" class="form-control" name="theme" id="theme" required>
+                        @error('theme')
+                        <div class="invalid-feedback">Incorrecto.</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
@@ -197,7 +206,8 @@ $( document ).ready(function() {
         $("#another-platform").val($(this).val());
     });
 
-    /*function generateAllowTimes() {
+    /******************************************
+    function generateAllowTimes() {
         var hours = [];
         var start = 5; 
         var end = 23; 
@@ -247,14 +257,15 @@ $( document ).ready(function() {
          });
 
         },
-    });*/
+    });
+    *************************************************/
 
 
 
-
+    //https://preview.keenthemes.com/html/start-html-pro/docs/forms/tempus-dominus-datepicker
     const linkedPicker1Element = document.getElementById("checkin-time");
     const linked1 = new tempusDominus.TempusDominus(linkedPicker1Element, {
-      //stepping: 15,
+      stepping: 15,
       display: {
             icons: {
               time: 'bi bi-clock',
@@ -280,7 +291,7 @@ $( document ).ready(function() {
     });
     const linked2 = new tempusDominus.TempusDominus(document.getElementById("departure-time"), {
         useCurrent: false,
-        //stepping: 15,
+        stepping: 15,
         display: {
             icons: {
               time: 'bi bi-clock',
@@ -331,7 +342,21 @@ $( document ).ready(function() {
       theme: 'bootstrap-5'
     });
 
-    //$('.time').mask('00:00');
+    
+
+    @if ($errors->any()) 
+        @error('checkin-time')
+            toastr.error('<strong>¡Error!</strong><br> Hora de ingreso a clase incorrecto.');
+        @enderror
+        @error('departure-time')
+            toastr.error('<strong>¡Error!</strong><br> Hora de salida a clase incorrecto.');
+        @enderror
+        @error('theme')
+            toastr.error('<strong>¡Error!</strong><br> Tema mal redactado.');
+        @enderror
+    @endif
+
+
 });
 
 

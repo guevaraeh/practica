@@ -17,11 +17,17 @@
                     <div class="mb-3">
                       <label for="exampleFormControlInput1" class="form-label"><b>Nombre(s)</b><font color="red">*</font></label>
                       <input type="text" class="form-control" id="exampleFirstName" name="name" required>
+                      @error('name')
+                        <div class="invalid-feedback">Muy largo.</div>
+                      @enderror
                     </div>
 
                     <div class="mb-3">
                       <label for="exampleFormControlInput1" class="form-label"><b>Apellido(s)</b><font color="red">*</font></label>
                       <input type="text" class="form-control" id="exampleLastName" name="lastname" required>
+                      @error('lastname')
+                        <div class="invalid-feedback">Muy largo.</div>
+                      @enderror
                     </div>
 
                     <div class="mb-3">
@@ -33,4 +39,25 @@
                 </div>
               </div>
             </div>
+@endsection
+
+@section('javascript')
+
+<script>
+$( document ).ready(function() {
+   
+  @if ($errors->any()) 
+    @error('name')
+        toastr.error('<strong>¡Error!</strong><br> Nombre incorrecto');
+    @enderror
+    @error('lastname')
+        toastr.error('<strong>¡Error!</strong><br> Apellido incorrecto');
+    @enderror
+  @endif
+
+});
+
+
+</script>
+
 @endsection

@@ -36,15 +36,10 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
-        //$name = $request->input('name');
-        //dd($name);
-        //dd($request);
-        //return redirect(route('teacher.create'));
-        //return url(route('teacher.create'));
-        /*Teacher::insert([
-            'name' => $request->input('name'),
-            'lastname' => $request->input('lastname')
-        ]);*/
+        $validated = $request->validate([
+            'name' => 'required|max:100',
+            'lastname' => 'required|max:100',
+        ]);
 
         $teacher = new Teacher;
         $teacher->name = $request->input('name');
@@ -60,18 +55,6 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher, Request $request)
     {
-        /*$dates = [strtotime($teacher->created_at), strtotime($teacher->updated_at)];
-        dd($dates);*/
-        /*if(strtotime($teacher->created_at) < strtotime($teacher->updated_at))
-            dd(1);
-        else dd(0);*/
-        
-        /*$assistances = DB::table('assistance_teachers')->where('teacher_id', $teacher->id)->orderBy('id', 'desc')->paginate(10);
-        return view('teacher.show', ['teacher' => $teacher, 'assistances' => $assistances]);*/
-
-        /*$assistances = DB::table('assistance_teachers')->where('teacher_id', $teacher->id)->orderBy('id', 'desc')->get();
-        return view('teacher.show', ['teacher' => $teacher, 'assistances' => $assistances]);*/
-
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
@@ -211,18 +194,6 @@ class TeacherController extends Controller
 
         return view('teacher.show',['teacher' => $teacher, 'periods' => Period::get()]);
     }
-
-    /*public function ajaxshow(Request $request)
-    {
-        if($request->ajax())
-        {
-            $assistance_teachers = DB::table('assistance_teachers')->query()
-                //->where('teacher_id', 1)
-                ->orderBy('id', 'desc');
-            return DataTables::eloquent($assistance_teachers)
-                                ->make(true);
-        }
-    }*/
 
     /**
      * Show the form for editing the specified resource.

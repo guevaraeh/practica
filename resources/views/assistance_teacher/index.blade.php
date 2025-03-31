@@ -22,23 +22,25 @@
                                 <table class="table table-hover" id="datat">
                                     <thead>
                                         <tr>
-                                            <th>Buscar</th>
-                                            <th>Buscar</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <!--<th></th>-->
+                                            <th class="input-filter" id="datepicker">Buscar</th>
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="select-module"></th>
+                                            <th class="select-period"></th>
+                                            <th class="select-turn"></th>
                                             {{--<th></th>--}}
-                                            <th>Buscar</th>
-                                            <th>Buscar</th>
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="input-filter">Buscar</th>
                                             {{--<th></th>--}}
-                                            <th>Buscar</th>
-                                            <th>Buscar</th>
+                                            <th class="input-filter">Buscar</th>
+                                            <th class="input-filter">Buscar</th>
                                             {{--<th>Buscar</th>--}}
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <thead class="table-light">
                                         <tr>
+                                            <!--<th></th>-->
                                             <th>Fecha de subida</th>
                                             <th>Apellidos y Nombres</th>
                                             <th>Módulo Formativo</th>
@@ -120,6 +122,7 @@ $( document ).ready(function() {
         serverSide: true,
         ajax:"{{ route('assistance_teacher') }}",
         columns: [
+            //{data:'checks', name:'checks'},
             {data:'created_at', name:'created_at'},
             {data:'teacher_name', name:'teacher_name'},
             {data:'training_module', name:'training_module'},
@@ -136,7 +139,7 @@ $( document ).ready(function() {
         ],
         initComplete: function () {
             this.api()
-                .columns([0,1,5,6,7,8])
+                .columns('.input-filter')
                 .every(function () {
                     let column = this;
                     let title = column.header().textContent;
@@ -144,8 +147,8 @@ $( document ).ready(function() {
                     // Create input element
                     let input = document.createElement('input');
                     input.placeholder = title;
-                    //input.setAttribute('class', 'form-control datepickersearch');
                     input.setAttribute('class', 'form-control');
+                    input.setAttribute('id', column.header().id);
                     //column.footer().replaceChildren(input);
                     column.header().replaceChildren(input);
      
@@ -186,7 +189,7 @@ $( document ).ready(function() {
                 });*/
 
             this.api()
-                .columns([2])
+                .columns('.select-module')
                 .every(function () {
                     let column = this;
      
@@ -210,7 +213,7 @@ $( document ).ready(function() {
                 });
 
             this.api()
-                .columns([3])
+                .columns('.select-period')
                 .every(function () {
                     let column = this;
      
@@ -235,7 +238,7 @@ $( document ).ready(function() {
                 });
 
             this.api()
-                .columns([4])
+                .columns('.select-turn')
                 .every(function () {
                     let column = this;
      
@@ -268,7 +271,6 @@ $( document ).ready(function() {
                 title: '¿Esta seguro que desea eliminarlo?',
                 text: 'Registro de asistencia del '+$(this).val(),
                 showDenyButton: true,
-                //showCancelButton: true,
                 confirmButtonText: "Si, eliminarlo",
                 denyButtonText: "No, cancelar",
                 icon: "warning",
@@ -280,8 +282,39 @@ $( document ).ready(function() {
             })
         });
 
+
     });
     
+    /*new tempusDominus.TempusDominus(document.getElementById("datepicker"), {
+            useCurrent: false,
+            display: {
+                icons: {
+                  time: 'bi bi-clock',
+                  date: 'bi bi-calendar',
+                  up: 'bi bi-arrow-up',
+                  down: 'bi bi-arrow-down',
+                  previous: 'bi bi-chevron-left',
+                  next: 'bi bi-chevron-right',
+                  today: 'bi bi-calendar-check',
+                  clear: 'bi bi-trash',
+                  close: 'bi bi-x',
+                },
+                viewMode: 'calendar',
+                components: {
+                  decades: false,
+                  year: true,
+                  month: true,
+                  date: true,
+                  hours: false,
+                  minutes: false,
+                  seconds: false
+                },
+            },
+            localization: {
+                locale: 'en',
+                format: "yyyy-MM-dd"
+            },
+        });*/
 
     /*$('.swalDefaultSuccess').click(function(){
         Swal.fire({

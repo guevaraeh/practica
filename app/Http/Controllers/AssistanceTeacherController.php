@@ -31,7 +31,7 @@ class AssistanceTeacherController extends Controller
                                     $sql = "CONCAT(teachers.lastname,' ',teachers.name) like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
-                                /*->filterColumn('period', function($query, $keyword) {
+                                /*->filterColumn('period', function($query, $keyword) { //en caso que se use periodo como foreign key
                                     $sql = "periods.name like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })*/
@@ -166,7 +166,15 @@ class AssistanceTeacherController extends Controller
                                     ;
                                     return $links;
                                 })
-                                ->rawColumns(['action'])
+                                /*->addColumn('checks',function (AssistanceTeacher $data){
+                                    $check = '
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="checked-assistance[]" value="'.$data->id.'">
+                                    </div>
+                                    ';
+                                    return $check;
+                                })*/
+                                ->rawColumns(['action','checks'])
                                 ->make(true);
         }
         return view('assistance_teacher.index', ['periods' => Period::get()]);
@@ -177,8 +185,6 @@ class AssistanceTeacherController extends Controller
      */
     public function create()
     {
-        //dd(date('Y-m-d H:i', time()));
-
         $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
         return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => Period::get()]);
     }
@@ -191,16 +197,11 @@ class AssistanceTeacherController extends Controller
             'period' => 'required',
             'turn' => 'required',
             'didactic-unit' => 'required',
-            //'checkin-time' => 'required',
-            //'departure-time' => 'required',
-            'theme' => 'required',
+            'checkin-time' => 'required|date',
+            'departure-time' => 'required|date',
+            'theme' => 'required|max:250',
             'place' => 'required',
         ]);
-
-        //$teacher = Teacher::find($request->input('teacher-id'));
-
-        //dd($request->collect());
-        //dd(str_replace(["P.\u{A0}M.","A.\u{A0}M."], ["PM","AM"], $request->input('checkin-time')));
 
         return view('assistance_teacher.confirm',['assistance' => $request, 'teacher' => Teacher::find($request->input('teacher-id'))]);
     }
@@ -210,32 +211,17 @@ class AssistanceTeacherController extends Controller
      */
     public function store(StoreAssistanceTeacherRequest $request)
     {
-        //dd($request->collect());
-        //dd($request->input('educational-platforms'));
-        //$newDateTime = date('Y-m-d H:i:s', strtotime($request->input('checkin-time')));
-        //dd($newDateTime);
-
-        //$string_version = implode(',', $request->input('educational-platforms'));
-        //dd($string_version);
-        //$destination_array = explode(',', $string_version);
-        //dd($destination_array);
-
         $validated = $request->validate([
             'teacher-id' => 'required',
             'training-module' => 'required',
             'period' => 'required',
             'turn' => 'required',
             'didactic-unit' => 'required',
-            //'checkin-time' => 'required',
-            //'departure-time' => 'required',
-            'theme' => 'required',
+            'checkin-time' => 'required|date',
+            'departure-time' => 'required|date',
+            'theme' => 'required|max:250',
             'place' => 'required',
         ]);
-
-        //dd($request->input('departure-time'));
-        //dd( date('Y-m-d H:i:s', strtotime($request->input('departure-time'))) );
-
-        //dd($request->collect());
 
         $assistanceTeacher = new AssistanceTeacher;
 
@@ -271,17 +257,6 @@ class AssistanceTeacherController extends Controller
     public function edit(AssistanceTeacher $assistanceTeacher)
     {
         $edplat = $assistanceTeacher->educational_platforms ? explode(', ',$assistanceTeacher->educational_platforms) : [];
-        //dd($edplat);
-        /*//$ar1 = ['Moodle Institucional','Google Meet','Skipe'];
-        $ar2 = ['Moodle Institucional','Google Meet','Skipe','Otro'];
-        $ar3 = ['Moodle Institucional','Otro'];
-        //dd($edplat);
-        dd(array_diff($edplat, ['Moodle Institucional','Google Meet','Skipe']));*/
-
-
-        /*if(in_array("holo", $edplat))
-            dd("funciona");
-        else dd("No hay");*/
         $periods = Period::get();
 
         return view('assistance_teacher.edit',['assistance_teacher' => $assistanceTeacher, 'edplat' => $edplat, 'periods' => $periods]);
@@ -298,13 +273,11 @@ class AssistanceTeacherController extends Controller
             'period' => 'required',
             'turn' => 'required',
             'didactic-unit' => 'required',
-            //'checkin-time' => 'required',
-            //'departure-time' => 'required',
-            'theme' => 'required',
+            'checkin-time' => 'required|date',
+            'departure-time' => 'required|date',
+            'theme' => 'required|max:250',
             'place' => 'required',
         ]);*/
-
-        //dd($request->collect());
 
         $assistanceTeacher->training_module = $request->input('training-module');
         $assistanceTeacher->period = $request->input('period');
@@ -332,8 +305,9 @@ class AssistanceTeacherController extends Controller
         return redirect(route('assistance_teacher'))->with('success', 'Registro eliminado');
     }
 
-    /*public function destroy_many()
+    public function destroy_many(Request $request)
     {
-        //AssistanceTeacher::::destroy([1, 2, 3]);
-    }*/
+        //AssistanceTeacher::destroy($request);
+        //return redirect(route('assistance_teacher'))->with('success', 'Registros eliminados');
+    }
 }
