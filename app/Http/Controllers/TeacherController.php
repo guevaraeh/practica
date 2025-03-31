@@ -101,14 +101,15 @@ class TeacherController extends Controller
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
                                     $updated = '';
-                                    if(strtotime($data->created_at) < strtotime($data->updated_at))
-                                    {
-                                        $updated = '<tr>
-                                                                <th><small>Editado</small></th>
-                                                                <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
-                                                            </tr>';
+                                    if(strtotime($data->created_at) < strtotime($data->updated_at)){
+                                        $updated = 
+                                        '<tr>
+                                            <th><small>Editado</small></th>
+                                            <td><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></td>
+                                        </tr>';
                                     }
                                     $links = 
+                                    '<div class="btn-group" role="group" aria-label="Basic mixed styles example">'.
                                       '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'" title="Ver">
                                           <i class="bi-eye"></i>
                                         </button>
@@ -174,8 +175,8 @@ class TeacherController extends Controller
                                           </div>
                                         </div>
                                         '.
-                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
-                                    .
+                                    '<a type="button" href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
+                                    /*.
                                     '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
                                       <i class="bi-trash"></i>
                                     </button>
@@ -197,7 +198,10 @@ class TeacherController extends Controller
                                           </div>
                                         </div>
                                       </div>
-                                    </div>'
+                                    </div>'*/
+                                    .
+                                    '<button type="button" class="btn btn-danger swalDefaultSuccess" form="deleteall" formaction="'.route('assistance_teacher.destroy',$data->id).'" value="'.date('Y-m-d h:i A', strtotime($data->created_at)).'" title="Eliminar"><i class="bi-trash"></i></button>'
+                                    .'</div>'
                                     ;
                                     return $links;
                                 })
@@ -225,7 +229,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
-        //
+        return view('teacher.edit',['teacher' => $teacher]);
     }
 
     /**
@@ -233,7 +237,11 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        //
+        $teacher->name = $request->input('name');
+        $teacher->lastname = $request->input('lastname');
+        $teacher->save();
+
+        return redirect(route('teacher'))->with('success', 'Profesor editado');
     }
 
     /**

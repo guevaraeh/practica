@@ -73,15 +73,15 @@
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Hora de ingreso a clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker1" name="checkin-time" id="checkin-time" 
-                            value="{{ date('Y-m-d H:i', time()) }}"
-                            {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
+                            {{--value="{{ date('Y-m-d H:i', time()) }}"--}}
+                            value="{{ date('Y-m-d h:i A', time()) }}"
                           required>
                         </div>
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Hora de salida de clase</b><font color="red">*</font></label>
                           <input type="text" class="form-control timepicker2" name="departure-time" id="departure-time" 
-                            value="{{ date('Y-m-d H:i', strtotime('+3 hour')) }}" 
-                            {{--value="{{ date('Y-m-d h:i A', time()) }}"--}}
+                            {{--value="{{ date('Y-m-d H:i', strtotime('+3 hour')) }}"--}} 
+                            value="{{ date('Y-m-d h:i A', strtotime('+3 hour')) }}"
                           required>
                         </div>
                         </div>
@@ -197,40 +197,7 @@ $( document ).ready(function() {
         $("#another-platform").val($(this).val());
     });
 
-    /*$('.timepicker1').timepicker({
-        timeFormat: 'h:mm p',
-        interval: 15,
-        minTime: '8',
-        maxTime: '6:00 pm',
-        //defaultTime: '11',
-        //startTime: '10:00',
-        dynamic: false,
-        dropdown: true,
-        scrollbar: true
-    });*/
-
-    /*$('.timepicker1').datetimepicker({
-        language:'es',
-        format: "dd/mm/yyyy hh:ii A",
-        autoclose: true,
-        todayBtn: true,
-        startDate: "2013-02-14 10:00",
-        minuteStep: 10
-    });*/
-
-    /*$('.timepicker2').timepicker({
-        timeFormat: 'h:mm p',
-        interval: 15,
-        minTime: '10',
-        maxTime: '8:00 pm',
-        //defaultTime: '11',
-        //startTime: '10:00',
-        dynamic: false,
-        dropdown: true,
-        scrollbar: true
-    });*/
-
-    function generateAllowTimes() {
+    /*function generateAllowTimes() {
         var hours = [];
         var start = 5; 
         var end = 23; 
@@ -259,7 +226,6 @@ $( document ).ready(function() {
          this.setOptions({
             maxDate: $('.timepicker2').val() ? $('.timepicker2').val() : false,
             maxTime: $('.timepicker2').val() ? ( moment( $('.timepicker1').val(),'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') == moment( $('.timepicker2').val(),'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') ? moment($('.timepicker2').val(),'YYYY-MM-DD HH:mm').format('HH:mm') : false ) : false,
-            //maxTime: $('.timepicker2').val() ? ( moment( $('.timepicker1').val(),'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') == moment( $('.timepicker2').val(),'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') ? moment($('.timepicker2').val(),'YYYY-MM-DD hh:mm A').format('HH:mm') : false ) : false,
          });
           
         },
@@ -278,22 +244,87 @@ $( document ).ready(function() {
          this.setOptions({
             minDate: $('.timepicker1').val() ? $('.timepicker1').val() : false,
             minTime: $('.timepicker1').val() ? ( moment($('.timepicker1').val(), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') == moment($('.timepicker2').val(), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') ? moment($('.timepicker1').val(), 'YYYY-MM-DD HH:mm').format('HH:mm') : false ) : false,
-            //minTime: $('.timepicker1').val() ? ( moment($('.timepicker1').val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') == moment($('.timepicker2').val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') ? moment($('.timepicker1').val(), 'YYYY-MM-DD hh:mm').format('HH:mm') : false ) : false,
          });
 
         },
-        /*onChangeDateTime:function(dp,$input){
-          alert( moment($input.val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD hh:mm A') );
-        }*/
+    });*/
+
+
+
+
+    const linkedPicker1Element = document.getElementById("checkin-time");
+    const linked1 = new tempusDominus.TempusDominus(linkedPicker1Element, {
+      //stepping: 15,
+      display: {
+            icons: {
+              time: 'bi bi-clock',
+              date: 'bi bi-calendar',
+              up: 'bi bi-arrow-up',
+              down: 'bi bi-arrow-down',
+              previous: 'bi bi-chevron-left',
+              next: 'bi bi-chevron-right',
+              today: 'bi bi-calendar-check',
+              clear: 'bi bi-trash',
+              close: 'bi bi-x',
+            },
+            sideBySide: true,
+        },
+      localization: {
+            locale: 'en',
+            hourCycle: 'h12',
+            format: "yyyy-MM-dd hh:mm T"
+        },
+      restrictions: {
+            maxDate: document.getElementById("departure-time").value,
+        }
+    });
+    const linked2 = new tempusDominus.TempusDominus(document.getElementById("departure-time"), {
+        useCurrent: false,
+        //stepping: 15,
+        display: {
+            icons: {
+              time: 'bi bi-clock',
+              date: 'bi bi-calendar',
+              up: 'bi bi-arrow-up',
+              down: 'bi bi-arrow-down',
+              previous: 'bi bi-chevron-left',
+              next: 'bi bi-chevron-right',
+              today: 'bi bi-calendar-check',
+              clear: 'bi bi-trash',
+              close: 'bi bi-x',
+            },
+            sideBySide: true,
+        },
+        localization: {
+            locale: 'en',
+            hourCycle: 'h12',
+            format: "yyyy-MM-dd hh:mm T"
+        },
+        restrictions: {
+            minDate: document.getElementById("checkin-time").value,
+        }
     });
 
-    /*
-  $('#datepicker').on('change', function() {
-    var selectedDate = $(this).val();  // Obtener la fecha y hora seleccionada
-    var hour = moment(selectedDate, 'YYYY-MM-DD HH:mm').format('HH:mm');  // Extraer solo la hora
-    console.log(hour);  // Muestra solo la hora
-});
-    */
+    //using event listeners
+    linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
+        linked2.updateOptions({
+            restrictions: {
+            minDate: e.detail.date,
+            },
+        });
+    });
+
+    //using subscribe method
+    const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
+        linked1.updateOptions({
+            restrictions: {
+            maxDate: e.date,
+            },
+        });
+    });
+
+
+
 
     $('.selectto').select2({
       language: 'es',

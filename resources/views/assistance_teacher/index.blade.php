@@ -5,15 +5,19 @@
 @endsection
 
 @section('content')
+
+<form method="POST" id="deleteall">
+    @csrf
+    @method('DELETE')
+</form>
+
 <div class="container-fluid">
             <div class="col-lg-12">
-                {{--@include('includes.alert')--}}
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
                 </div>
                 <div class="card-body">
-                    {{-- $assistance_teachers->links() --}}
                   <div class="table-responsive">
                                 <table class="table table-hover" id="datat">
                                     <thead>
@@ -30,11 +34,11 @@
                                             <th>Buscar</th>
                                             <th>Buscar</th>
                                             {{--<th>Buscar</th>--}}
-                                            <th>Acciones</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
-                                    <thead>
-                                        <tr class="table-secondary">
+                                    <thead class="table-light">
+                                        <tr>
                                             <th>Fecha de subida</th>
                                             <th>Apellidos y Nombres</th>
                                             <th>Módulo Formativo</th>
@@ -50,8 +54,8 @@
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr class="table-secondary">
+                                    <tfoot class="table-light">
+                                        <tr>
                                         	<th>Fecha de subida</th>
                                             <th>Apellidos y Nombres</th>
                                             <th>Módulo Formativo</th>
@@ -107,14 +111,7 @@
 <script>
 $( document ).ready(function() {
 
-    $.datetimepicker.setLocale('es');
-
-    /*$('.datepickersearch').datetimepicker({
-        timepicker: false,
-        format: 'Y-m-d',
-    });*/
-
-    $('#datat').DataTable({
+    var dt = $('#datat').DataTable({
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
         },
@@ -261,8 +258,27 @@ $( document ).ready(function() {
                     });
                 });
 
-
         }
+
+    });
+
+    dt.on('draw', function() {
+        $('.swalDefaultSuccess').click(function(){
+            Swal.fire({
+                title: '¿Esta seguro que desea eliminarlo?',
+                text: 'Registro de asistencia del '+$(this).val(),
+                showDenyButton: true,
+                //showCancelButton: true,
+                confirmButtonText: "Si, eliminarlo",
+                denyButtonText: "No, cancelar",
+                icon: "warning",
+            }).then((result) => {
+                if(result.isConfirmed){
+                    $('#deleteall').attr('action', $(this).attr('formaction'));
+                    $('#deleteall').submit();
+                }
+            })
+        });
 
     });
     

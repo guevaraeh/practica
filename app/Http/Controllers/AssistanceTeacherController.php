@@ -58,14 +58,15 @@ class AssistanceTeacherController extends Controller
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
                                     $updated = '';
-                                    if(strtotime($data->created_at) < strtotime($data->updated_at))
-                                    {
-                                        $updated = '<tr>
-                                                                <th><small>Editado</small></th>
-                                                                <th><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></th>
-                                                            </tr>';
+                                    if(strtotime($data->created_at) < strtotime($data->updated_at)){
+                                        $updated = 
+                                        '<tr>
+                                            <th><small>Editado</small></th>
+                                            <th><small>'.date('Y-m-d h:i A', strtotime($data->updated_at)).'</small></th>
+                                        </tr>';
                                     }
                                     $links = 
+                                    '<div class="btn-group" role="group" aria-label="Basic mixed styles example">'.
                                       '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal'.$data->id.'" title="Ver registro completo">
                                           <i class="bi-eye"></i>
                                         </button>
@@ -135,8 +136,8 @@ class AssistanceTeacherController extends Controller
                                           </div>
                                         </div>
                                     '.
-                                    '<a href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
-                                    .
+                                    '<a type="button" href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
+                                    /*.
                                     '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
                                       <i class="bi-trash"></i>
                                     </button>
@@ -158,7 +159,10 @@ class AssistanceTeacherController extends Controller
                                           </div>
                                         </div>
                                       </div>
-                                    </div>'
+                                    </div>'*/
+                                    .
+                                    '<button type="button" class="btn btn-danger swalDefaultSuccess" form="deleteall" formaction="'.route('assistance_teacher.destroy',$data->id).'" value="'.date('Y-m-d h:i A', strtotime($data->created_at)).' de '.$data->teacher_name.'" title="Eliminar"><i class="bi-trash"></i></button>'
+                                    .'</div>'
                                     ;
                                     return $links;
                                 })
@@ -196,6 +200,7 @@ class AssistanceTeacherController extends Controller
         //$teacher = Teacher::find($request->input('teacher-id'));
 
         //dd($request->collect());
+        //dd(str_replace(["P.\u{A0}M.","A.\u{A0}M."], ["PM","AM"], $request->input('checkin-time')));
 
         return view('assistance_teacher.confirm',['assistance' => $request, 'teacher' => Teacher::find($request->input('teacher-id'))]);
     }
@@ -326,4 +331,9 @@ class AssistanceTeacherController extends Controller
         $assistanceTeacher->delete();
         return redirect(route('assistance_teacher'))->with('success', 'Registro eliminado');
     }
+
+    /*public function destroy_many()
+    {
+        //AssistanceTeacher::::destroy([1, 2, 3]);
+    }*/
 }

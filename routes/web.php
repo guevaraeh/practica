@@ -13,6 +13,8 @@ Route::get('/', function () {
 Route::get('/teacher', [TeacherController::class, 'index'])->name('teacher');
 Route::get('/teacher/create', [TeacherController::class, 'create'])->name('teacher.create');
 Route::post('/teacher/store', [TeacherController::class, 'store'])->name('teacher.store');
+Route::get('/teacher/{teacher}/edit', [TeacherController::class, 'edit'])->name('teacher.edit');
+Route::put('/teacher/{teacher}/update', [TeacherController::class, 'update'])->name('teacher.update');
 Route::get('/teacher/{teacher}', [TeacherController::class, 'show'])->name('teacher.show');
 Route::delete('/teacher/{teacher}/destroy', [TeacherController::class, 'destroy'])->name('teacher.destroy');
 

@@ -5,6 +5,12 @@
 @endsection
 
 @section('content')
+
+<form method="POST" id="deleteall">
+    @csrf
+    @method('DELETE')
+</form>
+
 <div class="container-fluid">
             <div class="col-lg-12">
               <div class="card shadow mb-4">
@@ -27,11 +33,11 @@
                                             <th>Buscar</th>
                                             <th>Buscar</th>
                                             {{--<th>Buscar</th>--}}
-                                            <th>Acciones</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <thead>
-                                        <tr class="table-secondary">
+                                        <tr class="table-light">
                                             <th>Fecha de subida</th>
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
@@ -47,7 +53,7 @@
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <tr class="table-secondary">
+                                        <tr class="table-light">
                                             <th>Fecha de subida</th>
                                             <th>Módulo Formativo</th>
                                             <th>Período Académico</th>
@@ -100,7 +106,7 @@ $( document ).ready(function() {
         },
     });*/
 
-    $('#datat').DataTable({
+    var dt = $('#datat').DataTable({
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
         },
@@ -250,6 +256,26 @@ $( document ).ready(function() {
 
 
         }
+
+    });
+
+    dt.on('draw', function() {
+        $('.swalDefaultSuccess').click(function(){
+            Swal.fire({
+                title: '¿Esta seguro que desea eliminarlo?',
+                text: 'Registro de asistencia del '+$(this).val(),
+                showDenyButton: true,
+                //showCancelButton: true,
+                confirmButtonText: "Si, eliminarlo",
+                denyButtonText: "No, cancelar",
+                icon: "warning",
+            }).then((result) => {
+                if(result.isConfirmed){
+                    $('#deleteall').attr('action', $(this).attr('formaction'));
+                    $('#deleteall').submit();
+                }
+            })
+        });
 
     });
 

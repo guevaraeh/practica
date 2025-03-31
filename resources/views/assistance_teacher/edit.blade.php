@@ -230,7 +230,9 @@ $( document ).ready(function() {
         scrollbar: true
     });*/
 
-    function generateAllowTimes() {
+
+
+    /*function generateAllowTimes() {
         var hours = [];
         var start = 5; 
         var end = 23; 
@@ -259,7 +261,6 @@ $( document ).ready(function() {
          this.setOptions({
             maxDate: $('.timepicker2').val() ? $('.timepicker2').val() : false,
             maxTime: $('.timepicker2').val() ? ( moment( $('.timepicker1').val(),'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') == moment( $('.timepicker2').val(),'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') ? moment($('.timepicker2').val(),'YYYY-MM-DD HH:mm').format('HH:mm') : false ) : false,
-            //maxTime: $('.timepicker2').val() ? ( moment( $('.timepicker1').val(),'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') == moment( $('.timepicker2').val(),'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') ? moment($('.timepicker2').val(),'YYYY-MM-DD hh:mm A').format('HH:mm') : false ) : false,
          });
           
         },
@@ -278,24 +279,86 @@ $( document ).ready(function() {
          this.setOptions({
             minDate: $('.timepicker1').val() ? $('.timepicker1').val() : false,
             minTime: $('.timepicker1').val() ? ( moment($('.timepicker1').val(), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') == moment($('.timepicker2').val(), 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD') ? moment($('.timepicker1').val(), 'YYYY-MM-DD HH:mm').format('HH:mm') : false ) : false,
-            //minTime: $('.timepicker1').val() ? ( moment($('.timepicker1').val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') == moment($('.timepicker2').val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD') ? moment($('.timepicker1').val(), 'YYYY-MM-DD hh:mm').format('HH:mm') : false ) : false,
          });
 
         },
-        /*onChangeDateTime:function(dp,$input){
-          alert( moment($input.val(), 'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD hh:mm A') );
-        }*/
+    });*/
+
+
+    //https://preview.keenthemes.com/html/start-html-pro/docs/forms/tempus-dominus-datepicker
+    const linkedPicker1Element = document.getElementById("checkin-time");
+    const linked1 = new tempusDominus.TempusDominus(linkedPicker1Element, {
+      //stepping: 15,
+      display: {
+            icons: {
+              time: 'bi bi-clock',
+              date: 'bi bi-calendar',
+              up: 'bi bi-arrow-up',
+              down: 'bi bi-arrow-down',
+              previous: 'bi bi-chevron-left',
+              next: 'bi bi-chevron-right',
+              today: 'bi bi-calendar-check',
+              clear: 'bi bi-trash',
+              close: 'bi bi-x',
+            },
+            sideBySide: true,
+        },
+      localization: {
+            locale: 'en',
+            hourCycle: 'h12',
+            format: "yyyy-MM-dd hh:mm T"
+        },
+      restrictions: {
+            maxDate: document.getElementById("departure-time").value,
+        }
+    });
+    const linked2 = new tempusDominus.TempusDominus(document.getElementById("departure-time"), {
+        useCurrent: false,
+        //stepping: 15,
+        display: {
+            icons: {
+              time: 'bi bi-clock',
+              date: 'bi bi-calendar',
+              up: 'bi bi-arrow-up',
+              down: 'bi bi-arrow-down',
+              previous: 'bi bi-chevron-left',
+              next: 'bi bi-chevron-right',
+              today: 'bi bi-calendar-check',
+              clear: 'bi bi-trash',
+              close: 'bi bi-x',
+            },
+            sideBySide: true,
+        },
+        localization: {
+            locale: 'en',
+            hourCycle: 'h12',
+            format: "yyyy-MM-dd hh:mm T"
+        },
+        restrictions: {
+            minDate: document.getElementById("checkin-time").value,
+        }
     });
 
-    /*
-  $('#datepicker').on('change', function() {
-    var selectedDate = $(this).val();  // Obtener la fecha y hora seleccionada
-    var hour = moment(selectedDate, 'YYYY-MM-DD HH:mm').format('HH:mm');  // Extraer solo la hora
-    console.log(hour);  // Muestra solo la hora
-});
-    */
+    //using event listeners
+    linkedPicker1Element.addEventListener(tempusDominus.Namespace.events.change, (e) => {
+        linked2.updateOptions({
+            restrictions: {
+            minDate: e.detail.date,
+            },
+        });
+    });
 
-    //$('.time').mask('00:00');
+    //using subscribe method
+    const subscription = linked2.subscribe(tempusDominus.Namespace.events.change, (e) => {
+        linked1.updateOptions({
+            restrictions: {
+            maxDate: e.date,
+            },
+        });
+    });
+
+
+
 });
 
 
