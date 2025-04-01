@@ -1,3 +1,5 @@
+{{-- @can('manage-assistance') @endcan --}}
+
         <nav class="navbar navbar-expand navbar-light bg-black topbar mb-4 static-top shadow">
           <div class="container">
             <div id="navbar" class="navbar-collapse collapse">

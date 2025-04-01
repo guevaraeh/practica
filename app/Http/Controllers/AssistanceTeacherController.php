@@ -10,7 +10,10 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAssistanceTeacherRequest;
 use App\Http\Requests\UpdateAssistanceTeacherRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AssistanceTeacherExport;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class AssistanceTeacherController extends Controller
 {
@@ -19,6 +22,10 @@ class AssistanceTeacherController extends Controller
      */
     public function index(Request $request)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
@@ -45,15 +52,15 @@ class AssistanceTeacherController extends Controller
                                     return date('Y-m-d h:i A', strtotime($data->departure_time));
                                 })
                                 ->filterColumn('assistance_teachers.created_at', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(assistance_teachers.created_at, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(assistance_teachers.created_at, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->filterColumn('checkin_time', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->filterColumn('departure_time', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
@@ -137,29 +144,6 @@ class AssistanceTeacherController extends Controller
                                         </div>
                                     '.
                                     '<a type="button" href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
-                                    /*.
-                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
-                                      <i class="bi-trash"></i>
-                                    </button>
-
-                                    <div class="modal fade" id="modaldelete'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog modal-sm modal-dialog-centered">
-                                        <div class="modal-content">
-                                          <div class="modal-header bg-danger">
-                                            <h5 class="modal-title text-light" id="exampleModalLabel">¿Seguro que quieres eliminar el registro de asistencia de '.$data->teacher->lastname.' '.$data->teacher->name.' del '.date('Y-m-d h:i A', strtotime($data->created_at)).'?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                          </div>
-                                          <div class="modal-footer">
-                                            <form method="POST" action="'.route('assistance_teacher.destroy',$data->id).'"> 
-                                                <input type="hidden" name="_token" value="'.csrf_token().'" autocomplete="off">                    
-                                                <input type="hidden" name="_method" value="DELETE">
-                                              <button type="submit" class="btn btn-danger">Si</button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>'*/
                                     .
                                     '<button type="button" class="btn btn-danger swalDefaultSuccess" form="deleteall" formaction="'.route('assistance_teacher.destroy',$data->id).'" value="'.date('Y-m-d h:i A', strtotime($data->created_at)).' de '.$data->teacher_name.'" title="Eliminar"><i class="bi-trash"></i></button>'
                                     .'</div>'
@@ -240,6 +224,10 @@ class AssistanceTeacherController extends Controller
         
         $assistanceTeacher->save();
 
+        /*if (!Gate::allows('manage-assistance')) {
+            return view('dashboard')->with('success', 'Asistencia registrada');
+        }*/
+
         return redirect(route('assistance_teacher'))->with('success', 'Asistencia registrada');
     }
 
@@ -256,6 +244,10 @@ class AssistanceTeacherController extends Controller
      */
     public function edit(AssistanceTeacher $assistanceTeacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         $edplat = $assistanceTeacher->educational_platforms ? explode(', ',$assistanceTeacher->educational_platforms) : [];
         $periods = Period::get();
 
@@ -267,6 +259,10 @@ class AssistanceTeacherController extends Controller
      */
     public function update(UpdateAssistanceTeacherRequest $request, AssistanceTeacher $assistanceTeacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         /*$validated = $request->validate([
             'teacher-id' => 'required',
             'training-module' => 'required',
@@ -295,11 +291,24 @@ class AssistanceTeacherController extends Controller
         return redirect(route('assistance_teacher'))->with('success', 'Registro cambiado');
     }
 
+    public function export() 
+    {
+        /*if (! Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
+        return Excel::download(new AssistanceTeacherExport, 'Asistencias_'.date('YmdHi', time()).'.xlsx');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(AssistanceTeacher $assistanceTeacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         //dd($assistanceTeacher);
         $assistanceTeacher->delete();
         return redirect(route('assistance_teacher'))->with('success', 'Registro eliminado');
@@ -307,6 +316,10 @@ class AssistanceTeacherController extends Controller
 
     public function destroy_many(Request $request)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         //AssistanceTeacher::destroy($request);
         //return redirect(route('assistance_teacher'))->with('success', 'Registros eliminados');
     }

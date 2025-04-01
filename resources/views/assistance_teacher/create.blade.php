@@ -9,7 +9,7 @@
             <div class="col-lg-12">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Crear Asistencia</h6>
+                  <h5 class="m-0 font-weight-bold text-primary">Crear Asistencia</h5>
                 </div>
                 <div class="card-body">
                   <form action="{{ route('assistance_teacher.confirm') }}" method="POST">
@@ -265,7 +265,7 @@ $( document ).ready(function() {
     //https://preview.keenthemes.com/html/start-html-pro/docs/forms/tempus-dominus-datepicker
     const linkedPicker1Element = document.getElementById("checkin-time");
     const linked1 = new tempusDominus.TempusDominus(linkedPicker1Element, {
-      stepping: 15,
+      stepping: 5,
       display: {
             icons: {
               time: 'bi bi-clock',
@@ -291,7 +291,7 @@ $( document ).ready(function() {
     });
     const linked2 = new tempusDominus.TempusDominus(document.getElementById("departure-time"), {
         useCurrent: false,
-        stepping: 15,
+        stepping: 5,
         display: {
             icons: {
               time: 'bi bi-clock',

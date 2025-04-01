@@ -13,9 +13,9 @@
 
 <div class="container-fluid">
             <div class="col-lg-12">
-              <div class="card shadow mb-4">
+              <div class="card card-default shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
+                  <h5 class="card-title m-0 font-weight-bold text-primary">Lista de Asistencias <a class="btn btn-sm" href="{{ route('assistance_teacher.export') }}" title="Exportar a Excel"><i class="bi-download"></i></a></h5>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -23,7 +23,7 @@
                                     <thead>
                                         <tr>
                                             <!--<th></th>-->
-                                            <th class="input-filter" id="datepicker">Buscar</th>
+                                            <th class="input-filter input-date" id="datepicker">Buscar</th>
                                             <th class="input-filter">Buscar</th>
                                             <th class="select-module"></th>
                                             <th class="select-period"></th>
@@ -77,32 +77,9 @@
 
                                     </tbody>
                                 </table>
+                                <a class="btn btn-info float-end" href="{{ route('assistance_teacher.export') }}"><i class="bi-download"></i> Excel</a>
                             </div>
 
-                            {{--
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                              Launch demo modal
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    ...
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            --}}
                 </div>
               </div>
             </div>

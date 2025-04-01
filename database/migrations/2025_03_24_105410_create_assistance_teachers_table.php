@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assistance_teachers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id');
+            $table->foreignId('teacher_id')/*->constrained()*/;
             //$table->foreignIdFor(Teacher::class);
             $table->string('training_module', length: 100);
             $table->string('period', length: 100); //$table->foreignId('period_id');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->dateTime('departure_time', precision: 0)->nullable()->useCurrent();
             $table->string('theme', length: 250);
             $table->string('place', length: 100);
-            $table->string('educational_platforms', length: 200)->nullable();
+            $table->string('educational_platforms', length: 250)->nullable();
             $table->text('remarks')->nullable();
             $table->rememberToken();
             $table->timestamps();

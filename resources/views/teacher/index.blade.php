@@ -9,7 +9,7 @@
             <div class="col-lg-12">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Lista de profesores</h6>
+                  <h5 class="m-0 font-weight-bold text-primary">Lista de profesores</h5>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -34,6 +34,7 @@
                                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                     <a href="{{ route('teacher.show', $teacher->id) }}" class="btn btn-primary" title="Ver registros de asistencia"><i class="bi-eye"></i></a>
                                                     <a href="{{ route('teacher.edit', $teacher->id) }}" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>
+                                                    <a href="{{ route('teacher.export', $teacher->id) }}" class="btn btn-warning" title="Descargar Excel"><i class="bi-download"></i></a>
                                                 </div>
                                             </td>
                                         </tr>

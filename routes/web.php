@@ -28,5 +28,8 @@ Route::put('/assistanceteacher/{assistanceTeacher}/update', [AssistanceTeacherCo
 Route::delete('/assistanceteacher/{assistance_teacher}/destroy', [AssistanceTeacherController::class, 'destroy'])->name('assistance_teacher.destroy');
 Route::delete('/assistanceteacher/destroymany', [AssistanceTeacherController::class, 'destroy_many'])->name('assistance_teacher.destroy_many');
 
+Route::get('/assistances-export', [AssistanceTeacherController::class, 'export'])->name('assistance_teacher.export');
+
+Route::get('/assistances-export/{teacher}', [TeacherController::class, 'export'])->name('teacher.export');
 
 Route::get('/period', [PeriodController::class, 'index'])->name('period');

@@ -10,7 +10,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
+use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class TeacherController extends Controller
 {
@@ -19,6 +21,10 @@ class TeacherController extends Controller
      */
     public function index()
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         $teachers = Teacher::orderBy('lastname', 'asc')->get();
         return view('teacher.index',['teachers' => $teachers]);
     }
@@ -28,6 +34,10 @@ class TeacherController extends Controller
      */
     public function create()
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         return view('teacher.create');
     }
 
@@ -36,6 +46,10 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         $validated = $request->validate([
             'name' => 'required|max:100',
             'lastname' => 'required|max:100',
@@ -55,6 +69,10 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher, Request $request)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         if($request->ajax())
         {
             $assistance_teachers = AssistanceTeacher::query()
@@ -71,15 +89,15 @@ class TeacherController extends Controller
                                     return date('Y-m-d h:i A', strtotime($data->departure_time));
                                 })
                                 ->filterColumn('created_at', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(created_at, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->filterColumn('checkin_time', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(checkin_time, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->filterColumn('departure_time', function($query, $keyword) {
-                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %h:%i %r') like ?";
+                                    $sql = "DATE_FORMAT(departure_time, '%Y/%m/%d %r') like ?";
                                     $query->whereRaw($sql, ["%{$keyword}%"]);
                                 })
                                 ->addColumn('action',function (AssistanceTeacher $data){
@@ -156,32 +174,9 @@ class TeacherController extends Controller
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
-                                        '.
+                                        </div>'
+                                    .
                                     '<a type="button" href="'.route('assistance_teacher.edit',$data->id).'" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>'
-                                    /*.
-                                    '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modaldelete'.$data->id.'" title="Eliminar">
-                                      <i class="bi-trash"></i>
-                                    </button>
-
-                                    <div class="modal fade" id="modaldelete'.$data->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                      <div class="modal-dialog modal-sm modal-dialog-centered">
-                                        <div class="modal-content">
-                                          <div class="modal-header bg-danger">
-                                            <h5 class="modal-title text-light" id="exampleModalLabel">¿Seguro que quieres eliminar el registro de asistencia de '.$data->teacher->lastname.' '.$data->teacher->name.' del '.date('Y-m-d h:i A', strtotime($data->created_at)).'?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                          </div>
-                                          <div class="modal-footer">
-                                            <form method="POST" action="'.route('assistance_teacher.destroy',$data->id).'"> 
-                                                <input type="hidden" name="_token" value="'.csrf_token().'" autocomplete="off">                    
-                                                <input type="hidden" name="_method" value="DELETE">
-                                              <button type="submit" class="btn btn-danger">Si</button>
-                                            </form>
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>'*/
                                     .
                                     '<button type="button" class="btn btn-danger swalDefaultSuccess" form="deleteall" formaction="'.route('assistance_teacher.destroy',$data->id).'" value="'.date('Y-m-d h:i A', strtotime($data->created_at)).'" title="Eliminar"><i class="bi-trash"></i></button>'
                                     .'</div>'
@@ -200,6 +195,10 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         return view('teacher.edit',['teacher' => $teacher]);
     }
 
@@ -208,6 +207,10 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         $teacher->name = $request->input('name');
         $teacher->lastname = $request->input('lastname');
         $teacher->save();
@@ -215,11 +218,40 @@ class TeacherController extends Controller
         return redirect(route('teacher'))->with('success', 'Profesor editado');
     }
 
+    public function export(Teacher $teacher) 
+    {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
+        return AssistanceTeacher::query()
+            ->select([
+                DB::raw("DATE_FORMAT(created_at, '%Y/%m/%d %r')"),
+                'training_module',
+                'period',
+                'turn',
+                'didactic_unit',
+                DB::raw("DATE_FORMAT(checkin_time, '%Y/%m/%d %r')"),
+                DB::raw("DATE_FORMAT(departure_time, '%Y/%m/%d %r')"),
+                'theme',
+                'place',
+                'educational_platforms',
+                'remarks',
+                ]) //periods.name
+            ->where('teacher_id', $teacher->id)
+            ->orderBy('id', 'desc')
+            ->downloadExcel('Asistencias_'.$teacher->lastname.'_'.$teacher->name.'_'.date('YmdHi', time()).'.xlsx');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Teacher $teacher)
     {
+        /*if (!Gate::allows('manage-assistance')) {
+            abort(403);
+        }*/
+
         foreach ($teacher->assistances as $assistance)
             $assistance->delete();
         $teacher->delete();
