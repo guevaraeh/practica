@@ -218,6 +218,12 @@ class TeacherController extends Controller
         return redirect(route('teacher'))->with('success', 'Profesor editado');
     }
 
+    public function create_assistance(Teacher $teacher)
+    {
+        $teachers = DB::table('teachers')->orderBy('lastname','asc')->get();
+        return view('assistance_teacher.create',['teachers' => $teachers, 'periods' => Period::get(), 'tch' => $teacher]);
+    }
+
     public function export(Teacher $teacher) 
     {
         /*if (!Gate::allows('manage-assistance')) {

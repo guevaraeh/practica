@@ -18,12 +18,16 @@
                     <div class="form-group row">
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Apellidos y Nombres</b><font color="red">*</font></label>
+                          @if(isset($tch))
+                          <input type="hidden" name="teacher-id" value="{{ $tch->id }}"><br>{{ $tch->lastname . ' ' . $tch->name }}
+                          @else
                           <select class="form-select selectto" aria-label="Default select example" name="teacher-id" id="teacher-id" required>
                             <option selected disabled value="">--Seleccione profesor--</option>
                             @foreach($teachers as $teacher)
                                 <option value="{{ $teacher->id }}">{{ $teacher->lastname . ' ' . $teacher->name }}</option>
                             @endforeach
                           </select>
+                          @endif
                       </div>
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Módulo Formativo</b><font color="red">*</font></label>

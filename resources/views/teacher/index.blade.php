@@ -34,6 +34,7 @@
                                                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                                     <a href="{{ route('teacher.show', $teacher->id) }}" class="btn btn-primary" title="Ver registros de asistencia"><i class="bi-eye"></i></a>
                                                     <a href="{{ route('teacher.edit', $teacher->id) }}" class="btn btn-info" title="Editar"><i class="bi-pencil"></i></a>
+                                                    <a href="{{ route('teacher.create_assistance', $teacher->id) }}" class="btn btn-secondary" title="Crear Asistencia"><i class="bi-card-checklist"></i></a>
                                                     <a href="{{ route('teacher.export', $teacher->id) }}" class="btn btn-warning" title="Descargar Excel"><i class="bi-download"></i></a>
                                                 </div>
                                             </td>

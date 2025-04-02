@@ -77,7 +77,6 @@
 
                                     </tbody>
                                 </table>
-                                <a class="btn btn-info float-end" href="{{ route('assistance_teacher.export') }}"><i class="bi-download"></i> Excel</a>
                             </div>
 
                 </div>
