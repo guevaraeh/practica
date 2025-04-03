@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TeacherExport;
 use DataTables;
 use Illuminate\Support\Facades\Gate;
 
@@ -230,23 +231,7 @@ class TeacherController extends Controller
             abort(403);
         }*/
 
-        return AssistanceTeacher::query()
-            ->select([
-                DB::raw("DATE_FORMAT(created_at, '%Y/%m/%d %r')"),
-                'training_module',
-                'period',
-                'turn',
-                'didactic_unit',
-                DB::raw("DATE_FORMAT(checkin_time, '%Y/%m/%d %r')"),
-                DB::raw("DATE_FORMAT(departure_time, '%Y/%m/%d %r')"),
-                'theme',
-                'place',
-                'educational_platforms',
-                'remarks',
-                ]) //periods.name
-            ->where('teacher_id', $teacher->id)
-            ->orderBy('id', 'desc')
-            ->downloadExcel('Asistencias_'.$teacher->lastname.'_'.$teacher->name.'_'.date('YmdHi', time()).'.xlsx');
+        return Excel::download(new TeacherExport($teacher->id), 'Asistencias_'.$teacher->lastname.'_'.$teacher->name.'_'.date('YmdHi', time()).'.xlsx');
     }
 
     /**

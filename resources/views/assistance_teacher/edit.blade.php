@@ -18,7 +18,11 @@
 
                     <div class="mb-3">
                     <div class="form-group row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
+                          <label for="exampleFormControlInput1" class="form-label"><b>Apellidos y Nombres</b><font color="red">*</font></label>
+                          <input type="hidden" name="teacher-id" value="{{ $assistance_teacher->teacher->id }}"><br>{{ $assistance_teacher->teacher->lastname . ' ' . $assistance_teacher->teacher->name }}
+                        </div>
+                        <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Módulo Formativo</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
                             <option value="Profesional/Especialidad" {{ $assistance_teacher->training_module == 'Profesional/Especialidad' ? 'selected' : '' }}>Profesional/Especialidad</option>

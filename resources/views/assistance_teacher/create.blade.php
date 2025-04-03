@@ -28,7 +28,7 @@
                             @endforeach
                           </select>
                           @endif
-                      </div>
+                        </div>
                         <div class="col-sm-6">
                           <label for="exampleFormControlInput1" class="form-label"><b>Módulo Formativo</b><font color="red">*</font></label>
                           <select class="form-select" aria-label="Default select example" name="training-module" id="training-module" required>
